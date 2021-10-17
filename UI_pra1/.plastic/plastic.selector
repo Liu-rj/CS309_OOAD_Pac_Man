@@ -1,0 +1,4 @@
+repository "UI_pra1@ssl://wechat_os_qy00mv4cs2y5dt7-vtvbblmtu@sh01-plasticscm.unity.cn:8787"
+  path "/"
+    smartbranch "/main/11911424" 
+     
