@@ -23,8 +23,9 @@
 .vs/
 .vscode/
 .idea/
-./plastic/
+.plastic/
 .vsconfig
+./ignore.conf
 
 # Gradle cache directory
 .gradle/
