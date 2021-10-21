@@ -5,28 +5,44 @@ using UnityEngine.UI;
 
 public class heihei : MonoBehaviour
 {
-    public Camera camera_one;
+    // public Camera camera_one;
     public Rigidbody rd;
     public Text score_text;
     public int score;
     public Text victory;
-    public Animation am;
+    private Renderer rend;
+    private Material peace;
+    public Material angry;
 
     public Transform up_t;
     public Transform down_t;
     public Transform right_t;
     public Transform left_t;
+
+    private bool strong;
+
+    private float originTime;
     // Start is called before the first frame update
     void Start()
     {
         rd=GetComponent<Rigidbody>();
         rd.freezeRotation = true;
-        am = GetComponent<Animation>();
+        strong = false;
+        // am = GetComponent<Animation>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (strong)
+        {
+            originTime += Time.deltaTime;
+            if (originTime>10)
+            {
+                strong = false;
+                originTime = 0;
+            }
+        }
         float h=Input.GetAxis("Horizontal");
         float v=Input.GetAxis("Vertical");
         if(v>0){
@@ -52,8 +68,28 @@ public class heihei : MonoBehaviour
             Destroy(col.gameObject);
             score++;
             score_text.text="Score:  "+score;
-            if(score==32){
+            if(score==31){
                 victory.text="Win!";
+            }
+        }
+        if (col.gameObject.CompareTag("bigball"))
+        {
+            Destroy(col.gameObject);
+            strong = true;
+            // col.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
+
+        if (col.gameObject.CompareTag("ghost"))
+        {
+            if (strong)
+            {
+                col.gameObject.transform.position = new Vector3(94, 4, -32);
+                col.gameObject.GetComponent<ghost1>().reset=true;
+            }
+            else
+            {
+                rd.velocity = new Vector3(0, 0, 0);
+                            transform.position = new Vector3(55, 4, -55);
             }
         }
     }
