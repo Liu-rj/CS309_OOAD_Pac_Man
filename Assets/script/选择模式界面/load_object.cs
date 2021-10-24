@@ -5,6 +5,7 @@ using UnityEngine;
 public class load_object : MonoBehaviour
 {
     public GameObject chair;
+    public GameObject food;
  Vector3 a = new Vector3(-25, 0, -25); //实例化预制体的position，可自定义
     // Quaternion b = new Quaternion(0, 0, 0, 0);//实例化预制体的rotation，可自定义
 
@@ -31,6 +32,9 @@ public class load_object : MonoBehaviour
             for(int j=0;j<str.GetLength(1);j++){
                 if (str[i,j]=="1"){
                   GameObject Sphere = GameObject.Instantiate(chair,a+new Vector3(i,0,j),chair.transform.rotation) as GameObject;  
+                }
+                if (str[i,j]=="-1"){
+                    GameObject Food=GameObject.Instantiate(food,a+new Vector3(i,0,j),food.transform.rotation) as GameObject;
                 }
             }
         }

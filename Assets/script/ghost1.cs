@@ -31,19 +31,19 @@ public class ghost1 : MonoBehaviour
 
         if (start>8.6)
         {
-            rd.velocity=(new Vector3(1,0,0)*25);
+            rd.velocity=(new Vector3(1,0,0)*5);
             // transform.LookAt(up_t.position);
         }else if (start>5.9)
         {
-            rd.velocity=(new Vector3(0,0,-1)*25);
+            rd.velocity=(new Vector3(0,0,-1)*5);
             // transform.LookAt(right_t.position);
         }else if (start>2.7)
         {
-            rd.velocity=(new Vector3(-1,0,0)*25);
+            rd.velocity=(new Vector3(-1,0,0)*5);
             // transform.LookAt(down_t.position);
         }else
         {
-            rd.velocity=(new Vector3(0,0,1)*25);
+            rd.velocity=(new Vector3(0,0,1)*5);
             // transform.LookAt(left_t.position);
         }
     }

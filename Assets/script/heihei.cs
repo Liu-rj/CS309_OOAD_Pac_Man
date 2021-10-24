@@ -20,14 +20,15 @@ public class heihei : MonoBehaviour
     public Transform left_t;
 
     private bool strong;
+    private bool suck;
 
     private float originTime;
+    private float originTime_suck;
     // Start is called before the first frame update
     void Start()
     {
         rd=GetComponent<Rigidbody>();
         rd.freezeRotation = true;
-        strong = false;
         // am = GetComponent<Animation>();
     }
 
@@ -41,6 +42,24 @@ public class heihei : MonoBehaviour
             {
                 strong = false;
                 originTime = 0;
+            }
+        }
+        if (suck)
+        {
+            originTime_suck += Time.deltaTime;
+            if (originTime_suck>5)
+            {
+                suck = false;
+                originTime_suck = 0;
+            }
+            Collider[] colliders = Physics.OverlapSphere(this.transform.position, 20);
+            foreach (var item in colliders)
+            {
+                if (item.tag.Equals("food"))
+                {
+                    //让金币的开始移动
+                    item.GetComponent<bean>().moving = true;
+                }
             }
         }
         float h=Input.GetAxis("Horizontal");
@@ -68,7 +87,7 @@ public class heihei : MonoBehaviour
             Destroy(col.gameObject);
             score++;
             score_text.text="Score:  "+score;
-            if(score==31){
+            if(score==30){
                 victory.text="Win!";
             }
         }
@@ -77,6 +96,12 @@ public class heihei : MonoBehaviour
             Destroy(col.gameObject);
             strong = true;
             // col.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
+
+        if (col.gameObject.CompareTag("suckball"))
+        {
+            Destroy(col.gameObject);
+            suck = true;
         }
 
         if (col.gameObject.CompareTag("ghost"))
