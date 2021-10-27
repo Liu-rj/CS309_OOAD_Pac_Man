@@ -14,11 +14,23 @@ public class changeView : MonoBehaviour
     }
     private void Update() 
     {
+        float mouseX = Input.GetAxis("Mouse X") * 1 ;
+        float mouseY = Input.GetAxis("Mouse Y") * 1 ;
         if(Input.GetKeyDown(KeyCode.Q))  
         {
             camera_one.enabled = !camera_one.enabled;
             camera_two.enabled = !camera_two.enabled;
         }
+
+        if (camera_one.enabled&&Input.GetMouseButton (2))
+        {
+            camera_one.transform.localRotation = camera_one.transform.localRotation * Quaternion.Euler(-mouseY, mouseX, 0);
+        }
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            camera_one.transform.localRotation = Quaternion.Euler(90, 0, 0);
+        }
+        
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             if (camera_two.fieldOfView <= 80)
