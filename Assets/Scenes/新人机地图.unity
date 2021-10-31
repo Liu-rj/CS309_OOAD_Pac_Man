@@ -428,11 +428,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2f8ded04ba53ebc4d85bbbf3d1ce6052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.91
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2f8ded04ba53ebc4d85bbbf3d1ce6052, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.57
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2f8ded04ba53ebc4d85bbbf3d1ce6052, type: 3}
       propertyPath: m_LocalRotation.w
@@ -464,6 +464,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2f8ded04ba53ebc4d85bbbf3d1ce6052, type: 3}
       propertyPath: m_Name
+      value: desk
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2f8ded04ba53ebc4d85bbbf3d1ce6052, type: 3}
+      propertyPath: m_TagString
       value: desk
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -867,7 +871,7 @@ GameObject:
   - component: {fileID: 620677463}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: out_wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -963,7 +967,7 @@ GameObject:
   - component: {fileID: 630912419}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: out_wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1348,7 +1352,7 @@ GameObject:
   - component: {fileID: 976549182}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: out_wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1937,15 +1941,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5698038309578514465, guid: 8cb71565de5eff4489c49dc55b6bd93c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.16
+      value: 18.48
       objectReference: {fileID: 0}
     - target: {fileID: 5698038309578514465, guid: 8cb71565de5eff4489c49dc55b6bd93c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.61
+      value: -48.42
       objectReference: {fileID: 0}
     - target: {fileID: 5698038309578514465, guid: 8cb71565de5eff4489c49dc55b6bd93c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.25
+      value: -32.17
       objectReference: {fileID: 0}
     - target: {fileID: 5698038309578514465, guid: 8cb71565de5eff4489c49dc55b6bd93c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2111,6 +2115,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4712563320624320017, guid: 4ce282761dfd85b49967135110968017, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4712563320624320023, guid: 4ce282761dfd85b49967135110968017, type: 3}
       propertyPath: m_Name
       value: ghost1
@@ -2144,7 +2152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1641249241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.52, y: 0, z: -0.01}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 2078087123}
@@ -2281,6 +2289,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: chair
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 542d5a1ccd2a3634097b5ade4d627277, type: 3}
+      propertyPath: m_TagString
+      value: chair
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 542d5a1ccd2a3634097b5ade4d627277, type: 3}
 --- !u!4 &1805564248 stripped
@@ -2320,7 +2332,7 @@ GameObject:
   - component: {fileID: 1917921477}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: out_wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2647,4 +2659,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chair: {fileID: 1805564249}
+  desk: {fileID: 0}
   food: {fileID: 170221868}

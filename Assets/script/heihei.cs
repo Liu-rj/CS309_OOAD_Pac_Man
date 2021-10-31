@@ -65,16 +65,16 @@ public class heihei : MonoBehaviour
         float h=Input.GetAxis("Horizontal");
         float v=Input.GetAxis("Vertical");
         if(v>0){
-            rd.velocity=(new Vector3(0,0,1)*25);
+            rd.velocity=(new Vector3(0,0,1)*5);
             transform.LookAt(left_t.position);
         }else if(v<0){
-            rd.velocity=(new Vector3(0,0,-1)*25);
+            rd.velocity=(new Vector3(0,0,-1)*5);
             transform.LookAt(right_t.position);
         }else if(h>0){
-            rd.velocity=(new Vector3(1,0,0)*25);
+            rd.velocity=(new Vector3(1,0,0)*5);
             transform.LookAt(up_t.position);
         }else if(h<0){
-            rd.velocity=(new Vector3(-1,0,0)*25);
+            rd.velocity=(new Vector3(-1,0,0)*5);
             transform.LookAt(down_t.position);
         }
     }

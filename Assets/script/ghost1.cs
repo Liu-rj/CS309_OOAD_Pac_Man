@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class ghost1 : MonoBehaviour
 {
     private Rigidbody rd;
-
+     private Vector3 Pos_pre;
+     private Vector3 Pos_now;
     // public Transform up_t;
     // public Transform down_t;
     // public Transform right_t;
     // public Transform left_t;
     private float start;
-
+    private int count;
     public bool reset;
 
     // Start is called before the first frame update
@@ -19,54 +20,76 @@ public class ghost1 : MonoBehaviour
     {
         rd = GetComponent<Rigidbody>();
         rd.freezeRotation = true;
-        rd.velocity = (new Vector3(0, 0, 1) * 25);
+        rd.velocity = (new Vector3(0, 0, 1) * 5);
+        Pos_pre=GetComponent<Transform>().position-new Vector3(1,1,0);
+        Pos_now = GetComponent<Transform>().position;
+        count=0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // if (reset || start > 11.8)
-        // {
-        //     start = 0;
-        //     reset = false;
-        // }
-        //
-        // start += Time.deltaTime;
-        //
-        // if (start > 8.6)
-        // {
-        //     rd.velocity = (new Vector3(1, 0, 0) * 25);
-        //     // transform.LookAt(up_t.position);
-        // }
-        // else if (start > 5.9)
-        // {
-        //     rd.velocity = (new Vector3(0, 0, -1) * 25);
-        //     // transform.LookAt(right_t.position);
-        // }
-        // else
-        // {
-        //     rd.velocity = (new Vector3(0, 0, 1) * 25);
-        //     // transform.LookAt(left_t.position);
-        // }
+        count++;
+        if (count==100){
+            count=0;
+             Pos_pre.x=Pos_now.x;
+         Pos_pre.z=Pos_now.z;
+         Pos_now=GetComponent<Transform>().position;
+         Debug.Log(Pos_pre.x);
+         Debug.Log(Pos_pre.z);
+        Debug.Log(Pos_now.x);
+        Debug.Log(Pos_now.z);
+         System.Random random=new System.Random();
+        if (Pos_pre.x==Pos_now.x&&Pos_pre.z==Pos_now.z ){
+             Debug.Log("em here");
+              var i = random.Next(0,3);
+              Debug.Log(i);
+              if (i==0){
+                  rd.velocity = (new Vector3(-1, 0, 0) * 5);
+              }else if (i==1){
+                  rd.velocity=(new Vector3(1,0,0)*5);
+              }else if (i==2){
+                  rd.velocity=(new Vector3(0,0,1)*5);
+              }else {
+                  rd.velocity = (new Vector3(0, 0, -1) * 5);
+              }
+        }
+        }
     }
 
-    private void OnTriggerEnter(Collider col)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (col.gameObject.CompareTag("gLeft"))
-        {
-            rd.velocity = (new Vector3(-1, 0, 0) * 25);
-        }
-        if (col.gameObject.CompareTag("gRight"))
-        {
-            rd.velocity = (new Vector3(1, 0, 0) * 25);
-        }
-        if (col.gameObject.CompareTag("gUp"))
-        {
-            rd.velocity = (new Vector3(0, 0, 1) * 25);
-        }
-        if (col.gameObject.CompareTag("gDown"))
-        { 
-            rd.velocity = (new Vector3(0, 0, -1) * 25);
+        // if (col.gameObject.CompareTag("gLeft"))
+        // {
+        //     rd.velocity = (new Vector3(-1, 0, 0) * 25);
+        // }
+        // if (col.gameObject.CompareTag("gRight"))
+        // {
+        //     rd.velocity = (new Vector3(1, 0, 0) * 25);
+        // }
+        // if (col.gameObject.CompareTag("gUp"))
+        // {
+        //     rd.velocity = (new Vector3(0, 0, 1) * 25);
+        // }
+        // if (col.gameObject.CompareTag("gDown"))
+        // { 
+        //     rd.velocity = (new Vector3(0, 0, -1) * 25);
+        // }
+        System.Random random=new System.Random();
+        
+        if (collision.gameObject.CompareTag("out_wall")||collision.gameObject.CompareTag("chair")||(collision.gameObject.CompareTag("desk"))){
+            Debug.Log("ahhaha");
+              var i = random.Next(0,3);
+              Debug.Log(i);
+              if (i==0){
+                  rd.velocity = (new Vector3(-1, 0, 0) * 5);
+              }else if (i==1){
+                  rd.velocity=(new Vector3(1,0,0)*5);
+              }else if (i==2){
+                  rd.velocity=(new Vector3(0,0,1)*5);
+              }else {
+                  rd.velocity = (new Vector3(0, 0, -1) * 5);
+              }
         }
     }
 }
