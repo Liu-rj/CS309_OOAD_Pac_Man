@@ -567,7 +567,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1296567075}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1546946088}
+        m_TargetAssemblyTypeName: button_for_random_maze, Assembly-CSharp
+        m_MethodName: OnLoginButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1296567075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -911,6 +923,7 @@ GameObject:
   - component: {fileID: 1546946084}
   - component: {fileID: 1546946083}
   - component: {fileID: 1546946087}
+  - component: {fileID: 1546946088}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1011,6 +1024,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6cd358328a53cb4190eeb6962d990d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1546946088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1546946082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dfbc8e28e87fb745af3908d41ff6bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2021917282
