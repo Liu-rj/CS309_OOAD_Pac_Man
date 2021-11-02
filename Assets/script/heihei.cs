@@ -82,6 +82,7 @@ public class heihei : MonoBehaviour
 
     // }
     private void OnTriggerEnter(Collider col){
+        Debug.Log("trigger");
         if (col.gameObject.CompareTag("food"))
         {
             Destroy(col.gameObject);
@@ -104,18 +105,58 @@ public class heihei : MonoBehaviour
             suck = true;
         }
 
-        if (col.gameObject.CompareTag("ghost"))
+        // if (col.gameObject.CompareTag("ghost"))
+        // {
+        //     Debug.Log("in");
+        //     if (strong)
+        //     {
+        //         col.gameObject.transform.position = new Vector3(94, 4, -32);
+        //         col.gameObject.GetComponent<ghost1>().reset=true;
+        //     }
+        //     else
+        //     {Debug.Log("a");
+        //         rd.velocity = new Vector3(0, 0, 0);
+        //                     transform.position = new Vector3(0.5f, 0, 0.5f);
+        //     }
+        // }
+    }
+     private void OnCollisionEnter(Collision collision){
+          Debug.Log("collison");
+        if (collision.gameObject.CompareTag("food"))
         {
-            if (strong)
-            {
-                col.gameObject.transform.position = new Vector3(94, 4, -32);
-                col.gameObject.GetComponent<ghost1>().reset=true;
-            }
-            else
-            {
-                rd.velocity = new Vector3(0, 0, 0);
-                            transform.position = new Vector3(55, 4, -55);
+            Destroy(collision.gameObject);
+            score++;
+            score_text.text="Score:  "+score;
+            if(score==30){
+                victory.text="Win!";
             }
         }
-    }
+        if (collision.gameObject.CompareTag("bigball"))
+        {
+            Destroy(collision.gameObject);
+            strong = true;
+            // col.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
+
+        if (collision.gameObject.CompareTag("suckball"))
+        {
+            Destroy(collision.gameObject);
+            suck = true;
+        }
+
+        if (collision.gameObject.CompareTag("ghost"))
+        {
+            Debug.Log("in");
+            if (strong)
+            {
+                collision.gameObject.transform.position = new Vector3(94, 4, -32);
+                collision.gameObject.GetComponent<ghost1>().reset=true;
+            }
+            else
+            {Debug.Log("a");
+                rd.velocity = new Vector3(0, 0, 0);
+                            transform.position = new Vector3(0.5f, 0, 0.5f);
+            }
+        }
+     }
 }

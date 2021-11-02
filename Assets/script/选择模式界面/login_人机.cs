@@ -20,7 +20,7 @@ public class login_人机 : MonoBehaviour
          int width = 50;
          int height = 50;
          Process process = new Process();
-         process.StartInfo.FileName = @"python.exe";
+         process.StartInfo.FileName = @"C:\Users\admin\anaconda3\python.exe";
          string path = Application.dataPath;
          Debug.Log("abc");
          path += "/script/python_interface/py_import_test.py";

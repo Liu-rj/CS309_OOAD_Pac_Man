@@ -52,7 +52,7 @@ public static class MazeGenerator
 
         maze[position.X, position.Y] |= WallState.VISITED;  // 1000 1111
         positionStack.Push(position);
-
+        
         while (positionStack.Count > 0)
         {
             var current = positionStack.Pop();

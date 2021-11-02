@@ -30,19 +30,19 @@ public class ghost1 : MonoBehaviour
     void Update()
     {
         count++;
-        if (count==100){
+        if (count==20){
             count=0;
              Pos_pre.x=Pos_now.x;
          Pos_pre.z=Pos_now.z;
          Pos_now=GetComponent<Transform>().position;
-         Debug.Log(Pos_pre.x);
-         Debug.Log(Pos_pre.z);
-        Debug.Log(Pos_now.x);
-        Debug.Log(Pos_now.z);
+        //  Debug.Log(Pos_pre.x);
+        //  Debug.Log(Pos_pre.z);
+        // Debug.Log(Pos_now.x);
+        // Debug.Log(Pos_now.z);
          System.Random random=new System.Random();
         if (Pos_pre.x==Pos_now.x&&Pos_pre.z==Pos_now.z ){
-             Debug.Log("em here");
-              var i = random.Next(0,3);
+            //  Debug.Log("em here");
+              var i = random.Next(0,4);
               Debug.Log(i);
               if (i==0){
                   rd.velocity = (new Vector3(-1, 0, 0) * 5);
@@ -79,7 +79,7 @@ public class ghost1 : MonoBehaviour
         
         if (collision.gameObject.CompareTag("out_wall")||collision.gameObject.CompareTag("chair")||(collision.gameObject.CompareTag("desk"))){
             Debug.Log("ahhaha");
-              var i = random.Next(0,3);
+              var i = random.Next(0,4);
               Debug.Log(i);
               if (i==0){
                   rd.velocity = (new Vector3(-1, 0, 0) * 5);
