@@ -25,6 +25,7 @@ public class login_人机 : MonoBehaviour
          Debug.Log("abc");
          path += "/script/python_interface/py_import_test.py";
          path = path + " --id " + id.ToString()+" --width "+width+" --height "+height;
+         Debug.Log(path);
          process.StartInfo.UseShellExecute = false;
          process.StartInfo.RedirectStandardOutput = true;
          process.StartInfo.RedirectStandardError = true;
