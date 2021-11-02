@@ -105,23 +105,23 @@ public class heihei : MonoBehaviour
             suck = true;
         }
 
-        // if (col.gameObject.CompareTag("ghost"))
-        // {
-        //     Debug.Log("in");
-        //     if (strong)
-        //     {
-        //         col.gameObject.transform.position = new Vector3(94, 4, -32);
-        //         col.gameObject.GetComponent<ghost1>().reset=true;
-        //     }
-        //     else
-        //     {Debug.Log("a");
-        //         rd.velocity = new Vector3(0, 0, 0);
-        //                     transform.position = new Vector3(0.5f, 0, 0.5f);
-        //     }
-        // }
+        if (col.gameObject.CompareTag("ghost"))
+        {
+            Debug.Log("in");
+            if (strong)
+            {
+                col.gameObject.transform.position = new Vector3(-24.5f, 0, -24.5f);
+                col.gameObject.GetComponent<ghost1>().reset=true;
+            }
+            else
+            {Debug.Log("a");
+                rd.velocity = new Vector3(0, 0, 0);
+                            transform.position = new Vector3(-24.5f, 0, -24.5f);
+            }
+        }
     }
      private void OnCollisionEnter(Collision collision){
-          Debug.Log("collison");
+        Debug.Log("Colli");
         if (collision.gameObject.CompareTag("food"))
         {
             Destroy(collision.gameObject);
@@ -149,14 +149,18 @@ public class heihei : MonoBehaviour
             Debug.Log("in");
             if (strong)
             {
-                collision.gameObject.transform.position = new Vector3(94, 4, -32);
+                collision.gameObject.transform.position = new Vector3(-24.5f, 0, -24.5f);
                 collision.gameObject.GetComponent<ghost1>().reset=true;
             }
             else
             {Debug.Log("a");
                 rd.velocity = new Vector3(0, 0, 0);
-                            transform.position = new Vector3(0.5f, 0, 0.5f);
+                            transform.position = new Vector3(-24.5f, 0, -24.5f);
             }
+        }
+        if (collision.gameObject.CompareTag("wall_")||(collision.gameObject.CompareTag("out_wall"))){
+            Debug.Log("wall");
+                   rd.velocity = new Vector3(0, 0, 0);
         }
      }
 }

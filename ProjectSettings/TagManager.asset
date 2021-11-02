@@ -12,6 +12,7 @@ TagManager:
   - out_wall
   - chair
   - desk
+  - wall_
   layers:
   - Default
   - TransparentFX

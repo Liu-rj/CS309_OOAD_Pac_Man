@@ -139,6 +139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bean
       objectReference: {fileID: 0}
+    - target: {fileID: 3309169733196920054, guid: 6b91ca04e6bbfec4fb0d194411dc4202, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3730084310428003026, guid: 6b91ca04e6bbfec4fb0d194411dc4202, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -1132,7 +1136,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 703385748}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 24.5, y: 3.46, z: -24.5}
+  m_LocalPosition: {x: 24.5, y: 40, z: -24.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2078087123}
@@ -1620,7 +1624,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1267150516}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 2
@@ -2518,6 +2522,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2052032557346077782, guid: 4fa8f2fe2928ca0458c08d34f5260ad5, type: 3}
       propertyPath: m_Name
+      value: wall_
+      objectReference: {fileID: 0}
+    - target: {fileID: 2052032557346077782, guid: 4fa8f2fe2928ca0458c08d34f5260ad5, type: 3}
+      propertyPath: m_TagString
       value: wall_
       objectReference: {fileID: 0}
     - target: {fileID: 2052032557346077783, guid: 4fa8f2fe2928ca0458c08d34f5260ad5, type: 3}

@@ -35,10 +35,10 @@ public class ghost1 : MonoBehaviour
              Pos_pre.x=Pos_now.x;
          Pos_pre.z=Pos_now.z;
          Pos_now=GetComponent<Transform>().position;
-        //  Debug.Log(Pos_pre.x);
-        //  Debug.Log(Pos_pre.z);
-        // Debug.Log(Pos_now.x);
-        // Debug.Log(Pos_now.z);
+         Debug.Log(Pos_pre.x);
+         Debug.Log(Pos_pre.z);
+        Debug.Log(Pos_now.x);
+        Debug.Log(Pos_now.z);
          System.Random random=new System.Random();
         if (Pos_pre.x==Pos_now.x&&Pos_pre.z==Pos_now.z ){
             //  Debug.Log("em here");
@@ -77,7 +77,7 @@ public class ghost1 : MonoBehaviour
         // }
         System.Random random=new System.Random();
         
-        if (collision.gameObject.CompareTag("out_wall")||collision.gameObject.CompareTag("chair")||(collision.gameObject.CompareTag("desk"))){
+        if (collision.gameObject.CompareTag("out_wall")||collision.gameObject.CompareTag("chair")||(collision.gameObject.CompareTag("desk"))||(collision.gameObject.CompareTag("man"))){
             Debug.Log("ahhaha");
               var i = random.Next(0,4);
               Debug.Log(i);

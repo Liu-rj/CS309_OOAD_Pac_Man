@@ -19,7 +19,6 @@ public class load_object : MonoBehaviour
         // string[] str = textAsset.text.Split('\n');
         // // 将该文本中的字符串输出
          string[,]  str=login_人机._maze;
-         Debug.Log(str.Length);
       
         for (int i=0;i<str.GetLength(0);i++){
             for(int j=0;j<str.GetLength(1);j++){
