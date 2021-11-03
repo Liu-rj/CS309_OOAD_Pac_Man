@@ -2,6 +2,41 @@ import tkinter.filedialog
 from shutil import copy
 import importlib
 import argparse
+
+def checkValidation(board):
+    startPosition=(0,0)
+    boardSize=len(board)
+    visitedMap=[]
+    for i in range(boardSize):
+        visitedMap.append([])
+        for j in range(boardSize):
+            visitedMap[i].append(board[i][j])
+    queue=[startPosition]
+    visitedMap[0][0]=1
+    while len(queue)>0:
+        pos=queue.pop(0)
+        if (pos[0]>0 and visitedMap[pos[0]-1][pos[1]]!=1):
+            visitedMap[pos[0]-1][pos[1]]=1
+            queue.append((pos[0]-1,pos[1]))
+        if (pos[1]>0 and visitedMap[pos[0]][pos[1]-1]!=1):
+            visitedMap[pos[0]][pos[1]-1]=1
+            queue.append((pos[0],pos[1]-1))
+        if (pos[0]<boardSize-1 and visitedMap[pos[0]+1][pos[1]]!=1):
+            visitedMap[pos[0]+1][pos[1]]=1
+            queue.append((pos[0]+1,pos[1]))
+        if (pos[1]<boardSize-1 and visitedMap[pos[0]][pos[1]+1]!=1):
+            visitedMap[pos[0]][pos[1]+1]=1
+            queue.append((pos[0],pos[1]+1))
+    flag=True
+    for i in range(boardSize):
+        for j in range(boardSize):
+            if (visitedMap[i][j]!=1):
+                flag=False
+                break
+    if not flag:
+        board[0][0]=-2
+    return board
+
 def main(id,width,height):
     import sys
     import os
@@ -21,6 +56,7 @@ def main(id,width,height):
     constructor=module.Map_Script
     algo = constructor(width,height)
     map=algo.map_generation()
+    map=checkValidation(map)
     for i in range(height-1):
         flag=True
         for j in range(width):
@@ -51,13 +87,13 @@ if __name__=='__main__':
         '--width',
         type=int,
         help='the width of maze',
-        default=8
+        default=50
     )
     parser.add_argument(
         '--height',
         type=int,
         help='the height of maze',
-        default=8
+        default=50
     )
     args=parser.parse_args()
     main(args.id,args.width,args.height)

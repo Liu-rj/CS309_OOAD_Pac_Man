@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class heihei : MonoBehaviour
 {
     // public Camera camera_one;
     public Rigidbody rd;
     public Text score_text;
+    public Text hp_text;
     public int score;
     public Text victory;
     private Renderer rend;
@@ -18,23 +19,44 @@ public class heihei : MonoBehaviour
     public Transform down_t;
     public Transform right_t;
     public Transform left_t;
-
+     private int hp;
     private bool strong;
     private bool suck;
-
+    private bool exit;
+    private float exit_time;
+    private int direction;
     private float originTime;
     private float originTime_suck;
+    private int total_score=0;
     // Start is called before the first frame update
     void Start()
-    {
+    {   exit=false;
+        hp=3;
         rd=GetComponent<Rigidbody>();
         rd.freezeRotation = true;
-        // am = GetComponent<Animation>();
+        direction=0;
+        string[,]  str=login_人机._maze;
+      
+        for (int i=0;i<str.GetLength(0);i++){
+            for(int j=0;j<str.GetLength(1);j++){              
+                if (str[i,j]=="-1"){
+                total_score+=1;
+                }
+               
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        GetComponent<Transform>().position=new Vector3(GetComponent<Transform>().position.x,0.5f,GetComponent<Transform>().position.z);
+         if (exit){
+           exit_time+=Time.deltaTime;
+           if (exit_time>2){
+                SceneManager.LoadScene(2);
+           }
+         }
         if (strong)
         {
             originTime += Time.deltaTime;
@@ -67,100 +89,86 @@ public class heihei : MonoBehaviour
         if(v>0){
             rd.velocity=(new Vector3(0,0,1)*5);
             transform.LookAt(left_t.position);
+            direction=1;
         }else if(v<0){
             rd.velocity=(new Vector3(0,0,-1)*5);
             transform.LookAt(right_t.position);
+            direction=2;
         }else if(h>0){
             rd.velocity=(new Vector3(1,0,0)*5);
             transform.LookAt(up_t.position);
+            direction=3;
         }else if(h<0){
             rd.velocity=(new Vector3(-1,0,0)*5);
             transform.LookAt(down_t.position);
+            direction=4;
         }
     }
-    // private void OnCollisionEnter(Collections col){
 
-    // }
     private void OnTriggerEnter(Collider col){
-        Debug.Log("trigger");
+        
         if (col.gameObject.CompareTag("food"))
         {
             Destroy(col.gameObject);
             score++;
             score_text.text="Score:  "+score;
-            if(score==30){
+            if(score==total_score){
                 victory.text="Win!";
+                exit=true;
             }
         }
         if (col.gameObject.CompareTag("bigball"))
         {
             Destroy(col.gameObject);
             strong = true;
-            // col.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+            originTime=0;
         }
-
         if (col.gameObject.CompareTag("suckball"))
         {
             Destroy(col.gameObject);
             suck = true;
         }
-
-        if (col.gameObject.CompareTag("ghost"))
-        {
-            Debug.Log("in");
-            if (strong)
-            {
-                col.gameObject.transform.position = new Vector3(-24.5f, 0, -24.5f);
-                col.gameObject.GetComponent<ghost1>().reset=true;
-            }
-            else
-            {Debug.Log("a");
-                rd.velocity = new Vector3(0, 0, 0);
-                            transform.position = new Vector3(-24.5f, 0, -24.5f);
-            }
-        }
     }
      private void OnCollisionEnter(Collision collision){
         Debug.Log("Colli");
-        if (collision.gameObject.CompareTag("food"))
-        {
-            Destroy(collision.gameObject);
-            score++;
-            score_text.text="Score:  "+score;
-            if(score==30){
-                victory.text="Win!";
-            }
-        }
-        if (collision.gameObject.CompareTag("bigball"))
-        {
-            Destroy(collision.gameObject);
-            strong = true;
-            // col.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
-        }
-
-        if (collision.gameObject.CompareTag("suckball"))
-        {
-            Destroy(collision.gameObject);
-            suck = true;
-        }
-
+      
         if (collision.gameObject.CompareTag("ghost"))
         {
             Debug.Log("in");
             if (strong)
             {
+                Debug.Log("eat");
                 collision.gameObject.transform.position = new Vector3(-24.5f, 0, -24.5f);
                 collision.gameObject.GetComponent<ghost1>().reset=true;
             }
             else
-            {Debug.Log("a");
+            {
+                Debug.Log("oh");
+                hp-=1;
+                hp_text.text="Hp: "+hp;
+                if (hp==0){
+                      victory.text="Lose!";
+                      exit=true;
+                }
+
                 rd.velocity = new Vector3(0, 0, 0);
                             transform.position = new Vector3(-24.5f, 0, -24.5f);
             }
         }
         if (collision.gameObject.CompareTag("wall_")||(collision.gameObject.CompareTag("out_wall"))){
             Debug.Log("wall");
-                   rd.velocity = new Vector3(0, 0, 0);
+            if (direction==1){
+                rd.velocity=(new Vector3(0,0,1)*5);
+            }
+            else if (direction==2){
+                rd.velocity=(new Vector3(0,0,-1)*5);
+            }
+            else if (direction==3){
+                rd.velocity=(new Vector3(1,0,0)*5);
+            }
+            else if (direction==4){
+                rd.velocity=(new Vector3(-1,0,0)*5);
+            }
         }
      }
 }

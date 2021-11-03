@@ -35,15 +35,15 @@ public class ghost1 : MonoBehaviour
              Pos_pre.x=Pos_now.x;
          Pos_pre.z=Pos_now.z;
          Pos_now=GetComponent<Transform>().position;
-         Debug.Log(Pos_pre.x);
-         Debug.Log(Pos_pre.z);
-        Debug.Log(Pos_now.x);
-        Debug.Log(Pos_now.z);
+        //  Debug.Log(Pos_pre.x);
+        //  Debug.Log(Pos_pre.z);
+        // Debug.Log(Pos_now.x);
+        // Debug.Log(Pos_now.z);
          System.Random random=new System.Random();
         if (Pos_pre.x==Pos_now.x&&Pos_pre.z==Pos_now.z ){
             //  Debug.Log("em here");
               var i = random.Next(0,4);
-              Debug.Log(i);
+             
               if (i==0){
                   rd.velocity = (new Vector3(-1, 0, 0) * 5);
               }else if (i==1){
@@ -59,28 +59,13 @@ public class ghost1 : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // if (col.gameObject.CompareTag("gLeft"))
-        // {
-        //     rd.velocity = (new Vector3(-1, 0, 0) * 25);
-        // }
-        // if (col.gameObject.CompareTag("gRight"))
-        // {
-        //     rd.velocity = (new Vector3(1, 0, 0) * 25);
-        // }
-        // if (col.gameObject.CompareTag("gUp"))
-        // {
-        //     rd.velocity = (new Vector3(0, 0, 1) * 25);
-        // }
-        // if (col.gameObject.CompareTag("gDown"))
-        // { 
-        //     rd.velocity = (new Vector3(0, 0, -1) * 25);
-        // }
+      
         System.Random random=new System.Random();
         
-        if (collision.gameObject.CompareTag("out_wall")||collision.gameObject.CompareTag("chair")||(collision.gameObject.CompareTag("desk"))||(collision.gameObject.CompareTag("man"))){
-            Debug.Log("ahhaha");
+        if (collision.gameObject.CompareTag("out_wall")||collision.gameObject.CompareTag("chair")||collision.gameObject.CompareTag("desk")||collision.gameObject.CompareTag("man")||collision.gameObject.CompareTag("ghost")){
+           
               var i = random.Next(0,4);
-              Debug.Log(i);
+           
               if (i==0){
                   rd.velocity = (new Vector3(-1, 0, 0) * 5);
               }else if (i==1){
@@ -91,5 +76,6 @@ public class ghost1 : MonoBehaviour
                   rd.velocity = (new Vector3(0, 0, -1) * 5);
               }
         }
+       
     }
 }

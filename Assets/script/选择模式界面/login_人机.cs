@@ -37,12 +37,8 @@ public class login_人机 : MonoBehaviour
          process.OutputDataReceived += new DataReceivedEventHandler(dataReceiver);
          Console.ReadLine();
          process.WaitForExit();
-         for (int i = 0; i < height; i++)
-         {
-             for (int j = 0; j < width; j++)
-             {
-                 Debug.Log(_maze[i, j]);
-             }
+         if (_maze[0,0]=="-2"){
+                   SceneManager.LoadScene(2);
          }
          SceneManager.LoadScene(3);
  }
