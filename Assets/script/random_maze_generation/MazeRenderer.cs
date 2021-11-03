@@ -5,10 +5,12 @@ using UnityEngine;
 public class MazeRenderer : MonoBehaviour
 {
     public GameObject food;
-    public GameObject player;
+    public GameObject ghost;
+   
     [SerializeField]
     [Range(1, 50)]
     private int width = 10;
+     public static int tot_score=0;
 
     [SerializeField]
     [Range(1, 50)]
@@ -42,10 +44,12 @@ public class MazeRenderer : MonoBehaviour
             {
                 var cell = maze[i, j];
                 var position = new Vector3(-width / 2 + i, 0, -height / 2 + j);
-                if (i!=0 && j!=0){
-                          GameObject Food = GameObject.Instantiate(food,position,food.transform.rotation) as GameObject;  
+                if (i==width-1 && j==height-1){
+                    // GameObject Player = GameObject.Instantiate(player,position,player.transform.rotation) as GameObject; 
+                          GameObject Ghost = GameObject.Instantiate(ghost,position,ghost.transform.rotation) as GameObject;
                 }else{
-                     GameObject Player = GameObject.Instantiate(player,position,player.transform.rotation) as GameObject; 
+                    GameObject Food = GameObject.Instantiate(food,position,food.transform.rotation) as GameObject;  
+                    tot_score+=1;
                 }
                
                 if (cell.HasFlag(WallState.UP))

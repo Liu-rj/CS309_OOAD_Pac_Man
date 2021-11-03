@@ -18,6 +18,7 @@ public class changeView : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * 1 ;
         if(Input.GetKeyDown(KeyCode.Q))  
         {
+            Debug.Log("answer");
             camera_one.enabled = !camera_one.enabled;
             camera_two.enabled = !camera_two.enabled;
         }

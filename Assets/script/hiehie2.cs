@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-public class heihei : MonoBehaviour
+public class heihei2 : MonoBehaviour
 {
     // public Camera camera_one;
     public Rigidbody rd;
@@ -28,8 +28,6 @@ public class heihei : MonoBehaviour
     private float originTime;
     private float originTime_suck;
     private int total_score=0;
-    public int type;
-    //0  自定义， 1 完全随机
     // Start is called before the first frame update
     void Start()
     {   exit=false;
@@ -37,8 +35,7 @@ public class heihei : MonoBehaviour
         rd=GetComponent<Rigidbody>();
         rd.freezeRotation = true;
         direction=0;
-       if (type==0){
-            string[,]  str=login_人机._maze;
+        string[,]  str=login_人机._maze;
       
         for (int i=0;i<str.GetLength(0);i++){
             for(int j=0;j<str.GetLength(1);j++){              
@@ -48,10 +45,6 @@ public class heihei : MonoBehaviour
                
             }
         }
-       
-       }else if (type==1){
-           total_score=MazeRenderer.tot_score;
-       }
     }
 
     // Update is called once per frame
@@ -158,14 +151,8 @@ public class heihei : MonoBehaviour
                       exit=true;
                 }
 
-               if (type==0){
-                    rd.velocity = new Vector3(0, 0, 0);
+                rd.velocity = new Vector3(0, 0, 0);
                             transform.position = new Vector3(-24.5f, 0, -24.5f);
-               }
-               else if (type==1){
-                   rd.velocity = new Vector3(0, 0, 0);
-                            transform.position = new Vector3(-5, 0.5f, -5);
-               }
             }
         }
         if (collision.gameObject.CompareTag("wall_")||(collision.gameObject.CompareTag("out_wall"))){
