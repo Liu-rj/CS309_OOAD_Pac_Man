@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class MazeRenderer : MonoBehaviour
@@ -37,7 +38,7 @@ public class MazeRenderer : MonoBehaviour
 
         var floor = Instantiate(floorPrefab, transform);
         floor.localScale = new Vector3(width, 1, height);
-
+        var rng = new System.Random((int)DateTime.Now.Ticks);
         for (int i = 0; i < width; ++i)
         {
             for (int j = 0; j < height; ++j)
@@ -51,7 +52,14 @@ public class MazeRenderer : MonoBehaviour
                     GameObject Food = GameObject.Instantiate(food,position,food.transform.rotation) as GameObject;  
                     tot_score+=1;
                 }
-               
+                var test = rng.Next(0, 10);
+                if (i > 0 && i < width - 1 && j > 0 && j < height - 1)
+                {
+                    if (test > 6)
+                    {
+                        continue;
+                    }
+                }
                 if (cell.HasFlag(WallState.UP))
                 {
                     var topWall = Instantiate(wallPrefab, transform) as Transform;
