@@ -42,7 +42,6 @@ public class heihei : MonoBehaviour
                 if (str[i,j]=="-1"){
                 total_score+=1;
                 }
-               
             }
         }
     }
@@ -151,8 +150,8 @@ public class heihei : MonoBehaviour
                       exit=true;
                 }
 
-                rd.velocity = new Vector3(0, 0, 0);
-                            transform.position = new Vector3(-24.5f, 0, -24.5f);
+                rd.velocity = new Vector3(0, 0, 0); 
+                transform.position = new Vector3(-24.5f, 0, -24.5f);
             }
         }
         if (collision.gameObject.CompareTag("wall_")||(collision.gameObject.CompareTag("out_wall"))){
