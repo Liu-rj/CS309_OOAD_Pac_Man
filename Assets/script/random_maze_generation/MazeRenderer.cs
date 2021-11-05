@@ -11,8 +11,8 @@ public class MazeRenderer : MonoBehaviour
     [SerializeField]
     [Range(1, 50)]
     private int width = 10;
-     public static int tot_score=0;
-
+     public static int tot_score;
+      private int score_cou=0;
     [SerializeField]
     [Range(1, 50)]
     private int height = 10;
@@ -30,7 +30,9 @@ public class MazeRenderer : MonoBehaviour
     void Start()
     {
         var maze = MazeGenerator.Generate(width, height);
+        tot_score=0;
         Draw(maze);
+        tot_score=score_cou;
     }
 
     private void Draw(WallState[,] maze)
@@ -50,7 +52,8 @@ public class MazeRenderer : MonoBehaviour
                           GameObject Ghost = GameObject.Instantiate(ghost,position,ghost.transform.rotation) as GameObject;
                 }else{
                     GameObject Food = GameObject.Instantiate(food,position,food.transform.rotation) as GameObject;  
-                    tot_score+=1;
+                    score_cou+=1;
+                   
                 }
                 var test = rng.Next(0, 10);
                 if (i > 0 && i < width - 1 && j > 0 && j < height - 1)

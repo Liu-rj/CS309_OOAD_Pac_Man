@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RandomMaze.unity
     guid: 1243d153fa35ec744be0e46c97a7254f
+  - enabled: 1
+    path: Assets/Scenes/video_player.unity
+    guid: e5589af522e742947bf680e1a51c84bf
   m_configObjects: {}

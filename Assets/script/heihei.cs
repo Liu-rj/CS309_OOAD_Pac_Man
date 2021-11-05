@@ -37,6 +37,9 @@ public class heihei : MonoBehaviour
         rd=GetComponent<Rigidbody>();
         rd.freezeRotation = true;
         direction=0;
+        Debug.Log(type);
+        Debug.Log(MazeRenderer.tot_score);
+        Debug.Log("****************");
        if (type==0){
             string[,]  str=login_人机._maze;
       
@@ -50,8 +53,10 @@ public class heihei : MonoBehaviour
         }
        
        }else if (type==1){
-           total_score=MazeRenderer.tot_score;
+        //    total_score=MazeRenderer.tot_score;
+        total_score=99;
        }
+       Debug.Log(total_score);
     }
 
     // Update is called once per frame
@@ -66,6 +71,7 @@ public class heihei : MonoBehaviour
          }
         if (strong)
         {
+
             originTime += Time.deltaTime;
             if (originTime>10)
             {
@@ -127,6 +133,7 @@ public class heihei : MonoBehaviour
         if (col.gameObject.CompareTag("bigball"))
         {
             Destroy(col.gameObject);
+        
             strong = true;
             originTime=0;
         }
