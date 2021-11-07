@@ -27,6 +27,12 @@ EditorBuildSettings:
     path: Assets/Scenes/RandomMaze.unity
     guid: 1243d153fa35ec744be0e46c97a7254f
   - enabled: 1
-    path: Assets/Scenes/video_player.unity
-    guid: e5589af522e742947bf680e1a51c84bf
+    path: Assets/Scenes/tools_/ToolMapChoose.unity
+    guid: 1f1c60138a01b394f9970943e392fe73
+  - enabled: 1
+    path: Assets/Scenes/tools_/PVE_loading_tool.unity
+    guid: f747789c3eda9d4469b9db67754864c4
+  - enabled: 1
+    path: Assets/Scenes/tools_/ToolModePlay.unity
+    guid: a9260b4be5969a243a50420319967654
   m_configObjects: {}

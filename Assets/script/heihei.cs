@@ -26,10 +26,12 @@ public class heihei : MonoBehaviour
     private float exit_time;
     private int direction;
     private float originTime;
+    private float originTime2;
     private float originTime_suck;
     private int total_score=0;
+    private int speed=5;
     public int type;
-    //0  自定义， 1 完全随机
+    //0  自定义， 1 完全随机,2 道具模式
     // Start is called before the first frame update
     void Start()
     {   exit=false;
@@ -55,6 +57,17 @@ public class heihei : MonoBehaviour
        }else if (type==1){
         //    total_score=MazeRenderer.tot_score;
         total_score=99;
+       }else if (type==2){
+           string[,]  str=login_道具._maze;
+      
+        for (int i=0;i<str.GetLength(0);i++){
+            for(int j=0;j<str.GetLength(1);j++){              
+                if (str[i,j]=="-1"){
+                total_score+=1;
+                }
+               
+            }
+        }
        }
        Debug.Log(total_score);
     }
@@ -79,6 +92,16 @@ public class heihei : MonoBehaviour
                 originTime = 0;
             }
         }
+        if (speed==10)
+        {
+
+            originTime2 += Time.deltaTime;
+            if (originTime2>5)
+            {
+                speed = 5;
+                originTime2 = 0;
+            }
+        }
         if (suck)
         {
             originTime_suck += Time.deltaTime;
@@ -100,19 +123,19 @@ public class heihei : MonoBehaviour
         float h=Input.GetAxis("Horizontal");
         float v=Input.GetAxis("Vertical");
         if(v>0){
-            rd.velocity=(new Vector3(0,0,1)*5);
+            rd.velocity=(new Vector3(0,0,1)*speed);
             transform.LookAt(left_t.position);
             direction=1;
         }else if(v<0){
-            rd.velocity=(new Vector3(0,0,-1)*5);
+            rd.velocity=(new Vector3(0,0,-1)*speed);
             transform.LookAt(right_t.position);
             direction=2;
         }else if(h>0){
-            rd.velocity=(new Vector3(1,0,0)*5);
+            rd.velocity=(new Vector3(1,0,0)*speed);
             transform.LookAt(up_t.position);
             direction=3;
         }else if(h<0){
-            rd.velocity=(new Vector3(-1,0,0)*5);
+            rd.velocity=(new Vector3(-1,0,0)*speed);
             transform.LookAt(down_t.position);
             direction=4;
         }
@@ -142,6 +165,11 @@ public class heihei : MonoBehaviour
             Destroy(col.gameObject);
             suck = true;
         }
+        if (col.gameObject.CompareTag("accelerateball"))
+        {
+            Destroy(col.gameObject);
+            speed=10;
+        }
     }
      private void OnCollisionEnter(Collision collision){
         Debug.Log("Colli");
@@ -165,7 +193,7 @@ public class heihei : MonoBehaviour
                       exit=true;
                 }
 
-               if (type==0){
+               if (type==0||type==2){
                     rd.velocity = new Vector3(0, 0, 0);
                             transform.position = new Vector3(-24.5f, 0, -24.5f);
                }
@@ -178,16 +206,16 @@ public class heihei : MonoBehaviour
         if (collision.gameObject.CompareTag("wall_")||(collision.gameObject.CompareTag("out_wall"))){
             Debug.Log("wall");
             if (direction==1){
-                rd.velocity=(new Vector3(0,0,1)*5);
+                rd.velocity=(new Vector3(0,0,1)*speed);
             }
             else if (direction==2){
-                rd.velocity=(new Vector3(0,0,-1)*5);
+                rd.velocity=(new Vector3(0,0,-1)*speed);
             }
             else if (direction==3){
-                rd.velocity=(new Vector3(1,0,0)*5);
+                rd.velocity=(new Vector3(1,0,0)*speed);
             }
             else if (direction==4){
-                rd.velocity=(new Vector3(-1,0,0)*5);
+                rd.velocity=(new Vector3(-1,0,0)*speed);
             }
         }
      }
