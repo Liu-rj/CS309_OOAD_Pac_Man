@@ -26,4 +26,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RandomMaze.unity
     guid: 1243d153fa35ec744be0e46c97a7254f
+  - enabled: 1
+    path: Assets/Scenes/EVE/EVEScriptsChoose.unity
+    guid: 656d6f50d30642645a9caa051142a91c
+  - enabled: 1
+    path: Assets/Scenes/EVE/EVE.unity
+    guid: c180c9bb42f99874aa3eb0dd2b30e76c
+  - enabled: 1
+    path: Assets/Scenes/EVE/EVELoading.unity
+    guid: 596b8645d27c64e40b12c0653e9cfdb7
   m_configObjects: {}
