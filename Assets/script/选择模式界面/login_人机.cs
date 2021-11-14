@@ -22,10 +22,8 @@ public class login_人机 : MonoBehaviour
          Process process = new Process();
          process.StartInfo.FileName = @"python.exe";
          string path = Application.dataPath;
-         Debug.Log("abc");
          path += "/script/python_interface/py_import_test.py";
          path = path + " --id " + id.ToString()+" --width "+width+" --height "+height;
-         Debug.Log(path);
          process.StartInfo.UseShellExecute = false;
          process.StartInfo.RedirectStandardOutput = true;
          process.StartInfo.RedirectStandardError = true;
@@ -63,13 +61,6 @@ public class login_人机 : MonoBehaviour
              for (int j = 0; j < width; j++)
              {
                  _maze[i, j] = space_split[j];
-             }
-         }
-          for (int i = 0; i < height; i++)
-         {
-             for (int j = 0; j < width; j++)
-             {
-                 Debug.Log(_maze[i, j]);
              }
          }
      }
