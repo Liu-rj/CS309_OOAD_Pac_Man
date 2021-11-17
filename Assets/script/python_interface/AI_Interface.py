@@ -33,7 +33,7 @@ def main(id,color,id2):
     constructor=module.AI
     algo = constructor(color)
     boardFile=os.path.join(boardDir,str(id)+"_"+str(id2))
-    board=np.fromfile(boardFile,dtype=np.int32).reshape((50,50)).tolist()
+    board=np.fromfile(boardFile,dtype=np.int32).reshape((31,28)).tolist()
     current_position,correct_next_position=check_whether_can_run(color,board)
     algo.go(board)
     if (len(correct_next_position)==0):

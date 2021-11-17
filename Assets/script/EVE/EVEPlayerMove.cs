@@ -105,6 +105,7 @@ public class EVEPlayerMove : MonoBehaviour
     {
         Decide();
         UpdateMaze();
+        // Debug.Log("Pacman "+ id + " next position: " + _nextPos);
         _canMove = true;
     }
 
@@ -130,29 +131,38 @@ public class EVEPlayerMove : MonoBehaviour
 
     private void DataReceiver(object sender, DataReceivedEventArgs e)
     {
+        Debug.Log("Enter Receiving Next Move for Pacman");
         if (!string.IsNullOrEmpty(e.Data))
         {
             string rawData = e.Data;
             string[] blankSplit = rawData.Split(' ');
-            int x = Int32.Parse(blankSplit[0]);
-            int z = Int32.Parse(blankSplit[1]);
-            _nextPos = new Vector3(x - 24.5f, 0.5f, z - 24.5f);
-            var direction = _nextPos - transform.position;
-            if (direction == Vector3.forward)
+            int z = Int32.Parse(blankSplit[0]);
+            int x = Int32.Parse(blankSplit[1]);
+            Debug.Log(rawData);
+            if ((x == -1 && z == -1) || (x == -5 || z == -5))
             {
-                transform.rotation = Quaternion.Euler(0, -90, 0);
+                _nextPos = transform.position;
             }
-            else if (direction == Vector3.back)
+            else
             {
-                transform.rotation = Quaternion.Euler(0, 90, 0);
-            }
-            else if (direction == Vector3.left)
-            {
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            else if (direction == Vector3.right)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
+                _nextPos = new Vector3(x, 0.5f, -z);
+                var direction = _nextPos - transform.position;
+                if (direction == Vector3.forward)
+                {
+                    transform.rotation = Quaternion.Euler(0, -90, 0);
+                }
+                else if (direction == Vector3.back)
+                {
+                    transform.rotation = Quaternion.Euler(0, 90, 0);
+                }
+                else if (direction == Vector3.left)
+                {
+                    transform.rotation = Quaternion.Euler(0, 180, 0);
+                }
+                else if (direction == Vector3.right)
+                {
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
             }
             Debug.Log("Pacman decided next position: " + _nextPos);
         }
@@ -161,8 +171,8 @@ public class EVEPlayerMove : MonoBehaviour
     private void UpdateMaze()
     {
         var position = transform.position;
-        EVEManager.Maze[(int) (position.x + 24.5f), (int) (position.z + 24.5f)] = "0";
-        EVEManager.Maze[(int) (_nextPos.x + 24.5f), (int) (_nextPos.z + 24.5f)] = _color.ToString();
+        EVEManager.Maze[(int) (-position.z), (int) (position.x)] = "0";
+        EVEManager.Maze[(int) (-_nextPos.z), (int) (_nextPos.x)] = _color.ToString();
     }
     
     private void OnTriggerEnter(Collider col)
@@ -201,10 +211,10 @@ public class EVEPlayerMove : MonoBehaviour
     private void Reset()
     {
         var position = transform.position;
-        EVEManager.Maze[(int) (position.x + 24.5f), (int) (position.z + 24.5f)] = "0";
+        EVEManager.Maze[(int) (-position.z), (int) (position.x)] = "0";
         transform.position = _originPosition;
         _nextPos = _originPosition;
-        EVEManager.Maze[(int) (_nextPos.x + 24.5f), (int) (_nextPos.z + 24.5f)] = _color.ToString();
+        EVEManager.Maze[(int) (-_nextPos.z), (int) (_nextPos.x)] = _color.ToString();
         score = 0;
         _canMove = false;
     }

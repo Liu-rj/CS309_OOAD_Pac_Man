@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using System.Threading;
+using UnityEngine.SceneManagement;
 
 public class EVEManager : MonoBehaviour
 {
@@ -22,7 +23,6 @@ public class EVEManager : MonoBehaviour
     public static int DotNum;
     public static bool Moving;
 
-    private Vector3 _a = new Vector3(-25, 0, -25);
     private int _id1;
     private int _id2;
     private GameObject[] _players;
@@ -34,14 +34,23 @@ public class EVEManager : MonoBehaviour
     {
         _id1 = 11911419;
         _id2 = EVEChoose.GETOpponent();
-        LoadMap();
-        CalDotNum();
-        player1.GetComponent<EVEPlayerMove>().Init(_id1, _id2, 10, new Vector3(-24.5f, 0.5f, -0.5f));
-        player2.GetComponent<EVEPlayerMove>().Init(_id2, _id1, 11, new Vector3(24.5f, 0.5f, -0.5f));
-        _players = new[] {player1, blinky, clyde, inky, pinky, player2, blinky, clyde, inky, pinky};
+        player1.GetComponent<EVEPlayerMove>().Init(_id1, _id2, 10, player1.transform.position);
+        player2.GetComponent<EVEPlayerMove>().Init(_id2, _id1, 11, player2.transform.position);
+        _players = new[] {player1, player2, blinky, clyde, inky, pinky};
         _index = 0;
         _curPlayer = _players[_index];
+        MazeReceiver.ReceiveMaze();
+        AdjustMaze();
+        DrawMaze();
+        CalDotNum();
         Moving = false;
+        // StartCoroutine(UpdateMap());
+    }
+
+    IEnumerator UpdateMap()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadSceneAsync(9);
     }
 
     private void Update()
@@ -56,7 +65,7 @@ public class EVEManager : MonoBehaviour
         if (!Moving)
         {
             Moving = true;
-            if (_index == 0 || _index == 5)
+            if (_index == 0 || _index == 1)
             {
                 WriteMaze(_curPlayer.GetComponent<EVEPlayerMove>().id, _curPlayer.GetComponent<EVEPlayerMove>().opp);
                 _curPlayer.GetComponent<EVEPlayerMove>().Move();
@@ -65,8 +74,8 @@ public class EVEManager : MonoBehaviour
             {
                 _curPlayer.GetComponent<EVEGhostMove>().Move();
             }
-
-            _index = (_index + 1) % 10;
+        
+            _index = (_index + 1) % 6;
             _curPlayer = _players[_index];
         }
     }
@@ -85,88 +94,90 @@ public class EVEManager : MonoBehaviour
         }
     }
 
-    private void LoadMap()
+    private string[,] FillMaze(int x, int y, string[,] maze)
     {
-        //TODO: Use Random to initialize map
-        int id = 11911419;
-        int width = 50;
-        int height = 50;
-        Process process = new Process();
-        process.StartInfo.FileName = @"python.exe";
-        string path = Application.dataPath;
-        path += "/script/python_interface/py_import_test.py";
-        path = path + " --id " + id + " --width " + width + " --height " + height;
-        // Debug.Log(path);
-        process.StartInfo.UseShellExecute = false;
-        process.StartInfo.RedirectStandardOutput = true;
-        process.StartInfo.RedirectStandardError = true;
-        process.StartInfo.RedirectStandardInput = true;
-        process.StartInfo.CreateNoWindow = true;
-        process.StartInfo.Arguments = path;
-        process.Start();
-        process.BeginOutputReadLine();
-        process.OutputDataReceived += DataReceiver;
-        Console.ReadLine();
-        process.WaitForExit();
-        string[,] str = Maze;
-
-        for (int i = 0; i < str.GetLength(0); i++)
+        var dirs = new[] {Tuple.Create(1, 0), Tuple.Create(-1, 0), Tuple.Create(0, 1), Tuple.Create(0, -1)};
+        foreach (var dir in dirs)
         {
-            for (int j = 0; j < str.GetLength(1); j++)
+            var i = x + dir.Item1;
+            var j = y + dir.Item2;
+            if (i >= 0 && j >= 0 && i < 32 && j < 28 && maze[i, j] == "0")
             {
-                if (str[i, j] == "1")
-                {
-                    GameObject Wall = GameObject.Instantiate(walls,
-                        _a + new Vector3(i, 0, j) + new Vector3(0.5f, 0, 0.5f), walls.transform.rotation) as GameObject;
-                }
+                maze[i, j] = "1";
+                FillMaze(i, j, maze);
+            }
+        }
 
-                if (str[i, j] == "-1")
-                {
-                    GameObject Food = GameObject.Instantiate(food,
-                        _a + new Vector3(i, 0, j) + new Vector3(0.5f, 0, 0.5f), food.transform.rotation) as GameObject;
-                }
+        return maze;
+    }
 
-                if (str[i, j] == "2")
+    private void AdjustMaze()
+    {
+        var maze = new string[31, 28];
+        for (int i = 0; i < Maze.GetLength(0); i++)
+        {
+            for (int j = 0; j < Maze.GetLength(1); j++)
+            {
+                if (Maze[i, j] == "1")
                 {
-                    GameObject Strong_tool = GameObject.Instantiate(strong_tool,
-                        _a + new Vector3(i, 0, j) + new Vector3(0.5f, 0, 0.5f),
-                        strong_tool.transform.rotation) as GameObject;
+                    maze[i, j] = "1";
+                }
+                else
+                {
+                    maze[i, j] = "0";
                 }
             }
         }
-    }
 
-    private void DataReceiver(object sender, DataReceivedEventArgs e)
-    {
-        if (!string.IsNullOrEmpty(e.Data))
+        var afterFill = FillMaze(1, 1, maze);
+        for (int i = 0; i < afterFill.GetLength(0); i++)
         {
-            string raw_data = e.Data;
-            string[] comma_split = raw_data.Split(',');
-            int height = comma_split.Length;
-            string[] space_split = comma_split[0].Split(' ');
-            int width = space_split.Length;
-            Maze = new string[height, width];
-            // Debug.Log(e.Data);
-            for (int j = 0; j < width; j++)
+            for (int j = 0; j < afterFill.GetLength(1); j++)
             {
-                Maze[0, j] = space_split[j];
-            }
-
-            for (int i = 1; i < height; i++)
-            {
-                space_split = comma_split[i].Split(' ');
-                for (int j = 0; j < width; j++)
+                if (afterFill[i, j] == "0")
                 {
-                    Maze[i, j] = space_split[j];
+                    Maze[i, j] = "1";
                 }
             }
+        }
 
-            Maze[0, 0] = "4";
-            Maze[49, 0] = "4";
-            Maze[0, 49] = "4";
-            Maze[49, 49] = "4";
-            Maze[0, 24] = "10";
-            Maze[49, 24] = "11";
+        var position = player1.transform.position;
+        Maze[(int) -position.z, (int) position.x] = "10";
+        position = player2.transform.position;
+        Maze[(int) -position.z, (int) position.x] = "11";
+        for (int i = 2; i < _players.Length; i++)
+        {
+            position = _players[i].transform.position;
+            Maze[(int) -position.z, (int) position.x] = "4";
+        }
+
+        Maze[1, 1] = "-1";
+        Maze[1, 26] = "2";
+        Maze[29, 1] = "2";
+        Maze[29, 26] = "-1";
+    }
+
+    private void DrawMaze()
+    {
+        for (int i = 0; i < Maze.GetLength(0); i++)
+        {
+            for (int j = 0; j < Maze.GetLength(1); j++)
+            {
+                if (Maze[i, j] == "1")
+                {
+                    Instantiate(walls, new Vector3(j, 0, -i), walls.transform.rotation);
+                }
+
+                if (Maze[i, j] == "-1")
+                {
+                    Instantiate(food, new Vector3(j, 0, -i), food.transform.rotation);
+                }
+
+                if (Maze[i, j] == "2")
+                {
+                    Instantiate(strong_tool, new Vector3(j, 0, -i), strong_tool.transform.rotation);
+                }
+            }
         }
     }
 

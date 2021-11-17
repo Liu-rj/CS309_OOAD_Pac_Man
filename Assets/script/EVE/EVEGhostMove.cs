@@ -7,6 +7,7 @@ public class EVEGhostMove : MonoBehaviour
 {
     private bool _canMove;
     private Vector3 _nextPos;
+    private string _preTag;
     private float _speed = 0.05f;
     private Vector3 _direction;
     private System.Random _random;
@@ -18,6 +19,7 @@ public class EVEGhostMove : MonoBehaviour
     {
         _originPosition = transform.position;
         _nextPos = _originPosition;
+        _preTag = "0";
         _direction = Vector3.zero;
         _random = new System.Random();
         _dirs = new[] {Vector3.forward, Vector3.back, Vector3.left, Vector3.right};
@@ -34,8 +36,9 @@ public class EVEGhostMove : MonoBehaviour
     private void UpdateMaze()
     {
         var position = transform.position;
-        EVEManager.Maze[(int) (position.x + 24.5f), (int) (position.z + 24.5f)] = "0";
-        EVEManager.Maze[(int) (_nextPos.x + 24.5f), (int) (_nextPos.z + 24.5f)] = "4";
+        EVEManager.Maze[(int) (-position.z), (int) (position.x)] = _preTag;
+        _preTag = EVEManager.Maze[(int) (-_nextPos.z), (int) (_nextPos.x)];
+        EVEManager.Maze[(int) (-_nextPos.z), (int) (_nextPos.x)] = "4";
     }
     
     private void FixedUpdate()
@@ -54,40 +57,38 @@ public class EVEGhostMove : MonoBehaviour
 
     private void Decide()
     {
-        var num = 0;
-        var moves = new Vector3[4];
-        foreach (var dir in _dirs)
-        {
-            if (Valid(dir))
-            {
-                moves[num] = dir;
-                num += 1;
-            }
-        }
-
-        if (num == 1)
-        {
-            var dir = moves[0];
-            _nextPos = transform.position + dir;
-            transform.rotation = Quaternion.Euler(-90, 0, (-90 - dir.x * 90) * Math.Abs(dir.x) + dir.z * 90);
-            _direction = dir;
-        }
-        else if (num == 2 && moves[0] == -moves[1])
+        if (Valid(_direction) && _direction != Vector3.zero)
         {
             _nextPos = transform.position + _direction;
         }
         else
         {
-            var i = _random.Next(0, 4);
-            while (!Valid(_dirs[i]))
+            var num = 0;
+            foreach (var dir in _dirs)
             {
-                i = _random.Next(0, 4);
+                if (Valid(dir))
+                {
+                    num += 1;
+                }
             }
 
-            var dir = _dirs[i];
-            _nextPos = transform.position + dir;
-            transform.rotation = Quaternion.Euler(-90, 0, (-90 - dir.x * 90) * Math.Abs(dir.x) + dir.z * 90);
-            _direction = dir;
+            if (num == 0)
+            {
+                _nextPos = transform.position;
+            }
+            else
+            {
+                var i = _random.Next(0, 4);
+                while (!Valid(_dirs[i]))
+                {
+                    i = _random.Next(0, 4);
+                }
+
+                var nextDir = _dirs[i];
+                _nextPos = transform.position + nextDir;
+                transform.rotation = Quaternion.Euler(-90, 0, (-90 - nextDir.x * 90) * Math.Abs(nextDir.x) + nextDir.z * 90);
+                _direction = nextDir;
+            }
         }
     }
 
@@ -99,11 +100,13 @@ public class EVEGhostMove : MonoBehaviour
 
     public void Reset()
     {
-        var position = transform.position;
-        EVEManager.Maze[(int) (position.x + 24.5f), (int) (position.z + 24.5f)] = "0";
-        transform.position = _originPosition;
+        var transform1 = transform;
+        var position = transform1.position;
+        EVEManager.Maze[(int) (-position.z), (int) (position.x)] = _preTag;
+        transform1.position = _originPosition;
         _nextPos = _originPosition;
-        EVEManager.Maze[(int) (_nextPos.x + 24.5f), (int) (_nextPos.z + 24.5f)] = "4";
+        EVEManager.Maze[(int) (-_nextPos.z), (int) (_nextPos.x)] = "4";
+        _preTag = "0";
         _direction = Vector3.zero;
     }
 }

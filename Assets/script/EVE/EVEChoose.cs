@@ -36,7 +36,6 @@ public class EVEChoose : MonoBehaviour
         string path = Application.dataPath;
         path += "/script/python_interface/AI_selection.py";
         path = path + " --player " + id;
-        // Debug.Log(path);
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
@@ -55,7 +54,6 @@ public class EVEChoose : MonoBehaviour
         if (!string.IsNullOrEmpty(e.Data))
         {
             string data = e.Data;
-            // Debug.Log(data);
             if (data == "0")
             {
                 _state = 0;
@@ -97,7 +95,7 @@ public class EVEChoose : MonoBehaviour
             // TODO: check whether the user's file exists
             if (File.Exists(path))
             {
-                SceneManager.LoadScene(9);
+                SceneManager.LoadScene(8);
             }
             else
             {
