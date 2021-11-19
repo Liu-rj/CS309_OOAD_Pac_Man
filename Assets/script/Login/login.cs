@@ -1,25 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class login : MonoBehaviour
+using UnityEngine.UI;
+
+public class Login : MonoBehaviour
 {
+    public InputField id;
+    public InputField pwd;
 
-     public void OnLoginButtonClick(){
-         SceneManager.LoadScene(1);
-         
-     }
-
-
-    // Start is called before the first frame update
-    void Start()
+    public void OnLoginButtonClick()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        ServerConnector.SetupConnection();
+        ServerConnector.SendData("0");
+        var signal = ServerConnector.ReceiveData();
+        if (signal == "y")
+        {
+            ServerConnector.SendData(id.text + " " + pwd.text);
+            var str = ServerConnector.ReceiveData();
+            if (str == "y")
+            {
+                SceneManager.LoadScene(1);
+            }
+            else
+            {
+                Debug.Log("Username or Password failed!");
+                Debug.Log(str);
+                ServerConnector.CloseConnection();
+            }
+        }
+        else
+        {
+            Debug.Log(signal);
+            ServerConnector.CloseConnection();
+        }
     }
 }
+// 0 Login
+// 1 AIScript
+// 2 PlayTo

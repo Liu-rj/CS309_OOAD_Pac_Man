@@ -13,7 +13,10 @@ EditorBuildSettings:
     guid: 8f58698e22d18c14380b34853b747bc7
   - enabled: 1
     path: Assets/Scenes/Start/ChooseMode.unity
-    guid: 9a39749ea070bce4f973017136ee4695
+    guid: b734163a1198cff4c83f5564097dc39a
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/PVE/PVELoading.unity
     guid: 0ea9a5424ccbca24490fb6c0dd8e3400
@@ -24,10 +27,13 @@ EditorBuildSettings:
     path: Assets/Scenes/PVE/PVEMapChoose.unity
     guid: 02ca18f8cb148104b89bf15fe77733fb
   - enabled: 1
-    path: Assets/Scenes/PVE/RandomMaze.unity
-    guid: 1243d153fa35ec744be0e46c97a7254f
+    path: Assets/Scenes/PVE/PVERandomMaze.unity
+    guid: 31029b64ebe30d1429568934d47bfd15
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/EVE/EVEScriptsChoose.unity
+    path: Assets/Scenes/EVE/EVEChoose.unity
     guid: 656d6f50d30642645a9caa051142a91c
   - enabled: 1
     path: Assets/Scenes/EVE/EVELoading.unity

@@ -52,65 +52,71 @@ public class PacmanMove : MonoBehaviour
         _mask = LayerMask.GetMask("Wall");
         _originPosition = _dest;
     }
+    
+    public void Init(Vector3 pos)
+    {
+        transform.position = pos;
+        _originPosition = pos;
+    }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        int hihi=GetComponent<changeView>().currentCamera;
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
-        {
-            if (hihi<=1)
-            {
-                _pre = Vector3.forward;
-                _rotation = Quaternion.Euler(0, -90, 0);
-            }else if (hihi==2)
-            {
-                _pre = Vector3.back;
-                _rotation = Quaternion.Euler(0, 90, 0);
-            }
-            
-        }
+        // int hihi=GetComponent<changeView>().currentCamera;
+        // if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+        // {
+        //     if (hihi<=1)
+        //     {
+        //         _pre = Vector3.forward;
+        //         _rotation = Quaternion.Euler(0, -90, 0);
+        //     }else if (hihi==2)
+        //     {
+        //         _pre = Vector3.back;
+        //         _rotation = Quaternion.Euler(0, 90, 0);
+        //     }
+        //     
+        // }
 
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-        {
-            if (hihi<=1)
-            {
-                _pre = Vector3.back;
-                _rotation = Quaternion.Euler(0, 90, 0);
-            }else if (hihi==2)
-            {
-                _pre = Vector3.forward;
-                _rotation = Quaternion.Euler(0, -90, 0);
-            }
-            
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            if (hihi<=1)
-            {
-                _pre = Vector3.left;
-                _rotation = Quaternion.Euler(0, 180, 0);
-            }else if (hihi==2)
-            {
-                _pre = Vector3.right;
-                _rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            if (hihi<=1)
-            {
-                _pre = Vector3.right;
-                _rotation = Quaternion.Euler(0, 0, 0);
-            }else if (hihi==2)
-            {
-                _pre = Vector3.left;
-                _rotation = Quaternion.Euler(0, 180, 0);
-            }
-            
-        }
+        // if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+        // {
+        //     if (hihi<=1)
+        //     {
+        //         _pre = Vector3.back;
+        //         _rotation = Quaternion.Euler(0, 90, 0);
+        //     }else if (hihi==2)
+        //     {
+        //         _pre = Vector3.forward;
+        //         _rotation = Quaternion.Euler(0, -90, 0);
+        //     }
+        //     
+        // }
+        //
+        // if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        // {
+        //     if (hihi<=1)
+        //     {
+        //         _pre = Vector3.left;
+        //         _rotation = Quaternion.Euler(0, 180, 0);
+        //     }else if (hihi==2)
+        //     {
+        //         _pre = Vector3.right;
+        //         _rotation = Quaternion.Euler(0, 0, 0);
+        //     }
+        // }
+        //
+        // if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        // {
+        //     if (hihi<=1)
+        //     {
+        //         _pre = Vector3.right;
+        //         _rotation = Quaternion.Euler(0, 0, 0);
+        //     }else if (hihi==2)
+        //     {
+        //         _pre = Vector3.left;
+        //         _rotation = Quaternion.Euler(0, 180, 0);
+        //     }
+        //     
+        // }
 
         Vector3 temp = Vector3.MoveTowards(transform.position, _dest, speed);
         rd.MovePosition(temp);

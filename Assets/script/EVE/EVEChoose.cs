@@ -10,16 +10,12 @@ using UnityEngine.SceneManagement;
 
 public class EVEChoose : MonoBehaviour
 {
-    public InputField IDField;
-
-    private static int _state = 0;
-
+    public InputField idField;
     private static int _opponentID = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        _state = 0;
         _opponentID = 0;
     }
 
@@ -30,77 +26,65 @@ public class EVEChoose : MonoBehaviour
 
     public void ClickChooseScriptButton()
     {
-        int id = 11911400;
-        Process process = new Process();
-        process.StartInfo.FileName = @"python.exe";
-        string path = Application.dataPath;
-        path += "/script/python_interface/AI_selection.py";
-        path = path + " --player " + id;
-        process.StartInfo.UseShellExecute = false;
-        process.StartInfo.RedirectStandardOutput = true;
-        process.StartInfo.RedirectStandardError = true;
-        process.StartInfo.RedirectStandardInput = true;
-        process.StartInfo.CreateNoWindow = true;
-        process.StartInfo.Arguments = path;
-        process.Start();
-        process.BeginOutputReadLine();
-        process.OutputDataReceived += DataReceiver;
-        Console.ReadLine();
-        process.WaitForExit();
-    }
-
-    void DataReceiver(object sender, DataReceivedEventArgs e)
-    {
-        if (!string.IsNullOrEmpty(e.Data))
+        var path = FolderBrowserHelper.SelectFile(FolderBrowserHelper.PYFILTER);
+        Debug.Log(path);
+        if (path != "")
         {
-            string data = e.Data;
-            if (data == "0")
+            try
             {
-                _state = 0;
+                var content = File.ReadAllText(path);
+                ServerConnector.SendData("1");
+                var signal = ServerConnector.ReceiveData();
+                if (signal == "y")
+                {
+                    ServerConnector.SendData(content);
+                }
+                else
+                {
+                    Debug.Log(signal);
+                    ServerConnector.CloseConnection();
+                }
             }
-            else
+            catch (Exception e)
             {
-                _state = 1;
+                Console.WriteLine(e);
             }
         }
         else
         {
-            _state = 0;
-        }
-    }
-
-    private bool isNumeric(string str)
-    {
-        try
-        {
-            int.Parse(str);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            return false;
+            Debug.Log("Invalid File Path!");
         }
     }
 
     public void ClickOpponentButton()
     {
-        string str = IDField.text;
-        if (isNumeric(str))
+        var str = idField.text;
+        try
         {
             _opponentID = int.Parse(str);
-            string path = Environment.CurrentDirectory;
-            path += "/UserScripts/AI_" + _opponentID + ".py";
-            // Debug.Log(path);
-            // TODO: check whether the user's file exists
-            if (File.Exists(path))
+            ServerConnector.SendData("2");
+            var signal = ServerConnector.ReceiveData();
+            if (signal == "y")
             {
-                SceneManager.LoadScene(8);
+                ServerConnector.SendData(_opponentID.ToString());
+                if (ServerConnector.ReceiveData() == "y")
+                {
+                    SceneManager.LoadScene(8);
+                }
+                else
+                {
+                    Debug.Log("Script Does Not Exists!");
+                }
             }
             else
             {
-                Debug.Log("File not found");
+                Debug.Log(signal);
+                ServerConnector.CloseConnection();
             }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
         }
     }
 }

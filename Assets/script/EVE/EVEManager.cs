@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using System.Threading;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class EVEManager : MonoBehaviour
 {
@@ -17,201 +18,149 @@ public class EVEManager : MonoBehaviour
     public GameObject inky;
     public GameObject pinky;
     public GameObject walls;
-    public GameObject strong_tool;
+    public GameObject strongTool;
     public GameObject food;
-    public static string[,] Maze;
-    public static int DotNum;
     public static bool Moving;
 
-    private int _id1;
-    private int _id2;
     private GameObject[] _players;
-    private int _index;
-    private GameObject _curPlayer;
+    private Thread _thread;
+    private Queue<string> _msgQ;
+    private bool _end;
+    private string[,] _maze;
 
     // Start is called before the first frame update
     void Start()
     {
-        _id1 = 11911419;
-        _id2 = EVEChoose.GETOpponent();
-        player1.GetComponent<EVEPlayerMove>().Init(_id1, _id2, 10, player1.transform.position);
-        player2.GetComponent<EVEPlayerMove>().Init(_id2, _id1, 11, player2.transform.position);
-        _players = new[] {player1, player2, blinky, clyde, inky, pinky};
-        _index = 0;
-        _curPlayer = _players[_index];
-        MazeReceiver.ReceiveMaze();
-        AdjustMaze();
+        _players = new[] {blinky, clyde, inky, pinky, player1, player2};
+        _maze = MazeReceiver.ReceiveMaze();
         DrawMaze();
-        CalDotNum();
         Moving = false;
-        // StartCoroutine(UpdateMap());
+        _msgQ = new Queue<string>();
+        _end = false;
+        _thread = new Thread(ReceiveData)
+        {
+            IsBackground = true
+        };
+        _thread.Start();
     }
 
-    IEnumerator UpdateMap()
+    private void SetGameOver()
     {
-        yield return new WaitForSeconds(1);
-        SceneManager.LoadSceneAsync(9);
+        _end = true;
+        for (int i = 0; i < 6; i++)
+        {
+            if (i < 4)
+            {
+                _players[i].GetComponent<EVEGhostMove>().enabled = false;
+            }
+            else
+            {
+                _players[i].GetComponent<EVEPlayerMove>().enabled = false;
+            }
+        }
     }
 
     private void Update()
     {
-        if (DotNum == 0)
+        if (!Moving && _msgQ.Count > 0 && !_end)
         {
-            Debug.Log("Game Over!!!");
-            Debug.Log("player1 score: " + player1.GetComponent<EVEPlayerMove>().score);
-            Debug.Log("player2 score: " + player2.GetComponent<EVEPlayerMove>().score);
-        }
-
-        if (!Moving)
-        {
-            Moving = true;
-            if (_index == 0 || _index == 1)
+            var str = _msgQ.Dequeue().Split(' ');
+            var signal = int.Parse(str[0]);
+            if (signal < 4)
             {
-                WriteMaze(_curPlayer.GetComponent<EVEPlayerMove>().id, _curPlayer.GetComponent<EVEPlayerMove>().opp);
-                _curPlayer.GetComponent<EVEPlayerMove>().Move();
+                var pos = new Vector3(int.Parse(str[2]), 0.5f, -int.Parse(str[1]));
+                _players[signal].GetComponent<EVEGhostMove>().MoveTo(pos);
+            }
+            else if (signal < 6)
+            {
+                var pos = new Vector3(int.Parse(str[2]), 0.5f, -int.Parse(str[1]));
+                _players[signal].GetComponent<EVEPlayerMove>().MoveTo(pos);
             }
             else
             {
-                _curPlayer.GetComponent<EVEGhostMove>().Move();
+                SetGameOver();
+                switch (signal)
+                {
+                    case 6:
+                        Debug.Log(str[1] + " " + str[2]);
+                        break;
+                    case 7:
+                        Debug.Log("Pacman " + str[1] + " Illegal Move");
+                        break;
+                    case 8:
+                        Debug.Log(str[1] + "Game Over!");
+                        break;
+                }
             }
-        
-            _index = (_index + 1) % 6;
-            _curPlayer = _players[_index];
         }
     }
 
-    private void CalDotNum()
+    private void ReceiveData()
     {
-        for (int i = 0; i < Maze.GetLength(0); i++)
+        if (ServerConnector.IsConnected)
         {
-            for (int j = 0; j < Maze.GetLength(1); j++)
+            ServerConnector.SendData("y");
+            while (ServerConnector.IsConnected)
             {
-                if (Maze[i, j] == "-1")
+                var str = ServerConnector.ReceiveData();
+                if (str != "")
                 {
-                    DotNum += 1;
+                    _msgQ.Enqueue(str);
+                    ServerConnector.SendData("y");
+                    var signal = int.Parse(str[0].ToString());
+                    if (signal >= 6)
+                    {
+                        return;
+                    }
                 }
             }
         }
     }
 
-    private string[,] FillMaze(int x, int y, string[,] maze)
-    {
-        var dirs = new[] {Tuple.Create(1, 0), Tuple.Create(-1, 0), Tuple.Create(0, 1), Tuple.Create(0, -1)};
-        foreach (var dir in dirs)
-        {
-            var i = x + dir.Item1;
-            var j = y + dir.Item2;
-            if (i >= 0 && j >= 0 && i < 32 && j < 28 && maze[i, j] == "0")
-            {
-                maze[i, j] = "1";
-                FillMaze(i, j, maze);
-            }
-        }
-
-        return maze;
-    }
-
-    private void AdjustMaze()
-    {
-        var maze = new string[31, 28];
-        for (int i = 0; i < Maze.GetLength(0); i++)
-        {
-            for (int j = 0; j < Maze.GetLength(1); j++)
-            {
-                if (Maze[i, j] == "1")
-                {
-                    maze[i, j] = "1";
-                }
-                else
-                {
-                    maze[i, j] = "0";
-                }
-            }
-        }
-
-        var afterFill = FillMaze(1, 1, maze);
-        for (int i = 0; i < afterFill.GetLength(0); i++)
-        {
-            for (int j = 0; j < afterFill.GetLength(1); j++)
-            {
-                if (afterFill[i, j] == "0")
-                {
-                    Maze[i, j] = "1";
-                }
-            }
-        }
-
-        var position = player1.transform.position;
-        Maze[(int) -position.z, (int) position.x] = "10";
-        position = player2.transform.position;
-        Maze[(int) -position.z, (int) position.x] = "11";
-        for (int i = 2; i < _players.Length; i++)
-        {
-            position = _players[i].transform.position;
-            Maze[(int) -position.z, (int) position.x] = "4";
-        }
-
-        Maze[1, 1] = "-1";
-        Maze[1, 26] = "2";
-        Maze[29, 1] = "2";
-        Maze[29, 26] = "-1";
-    }
-
+    // 0 empty
+    // 1 wall
+    // 2 strongTool
+    // 3 dot
+    // 4 ghost1 0
+    // 5 ghost2 1
+    // 6 ghost3 2
+    // 7 ghost4 3
+    // 8 pacman1 4
+    // 9 pacman2 5
     private void DrawMaze()
     {
-        for (int i = 0; i < Maze.GetLength(0); i++)
+        for (int i = 0; i < _maze.GetLength(0); i++)
         {
-            for (int j = 0; j < Maze.GetLength(1); j++)
+            for (int j = 0; j < _maze.GetLength(1); j++)
             {
-                if (Maze[i, j] == "1")
+                if (_maze[i, j] == "1")
                 {
-                    Instantiate(walls, new Vector3(j, 0, -i), walls.transform.rotation);
+                    var obj = Instantiate(walls, new Vector3(j, 0, -i), walls.transform.rotation);
+                    obj.SetActive(true);
                 }
-
-                if (Maze[i, j] == "-1")
+                else if (_maze[i, j] == "2")
                 {
-                    Instantiate(food, new Vector3(j, 0, -i), food.transform.rotation);
+                    var obj = Instantiate(strongTool, new Vector3(j, 0, -i), strongTool.transform.rotation);
+                    obj.SetActive(true);
                 }
-
-                if (Maze[i, j] == "2")
+                else if (_maze[i, j] == "3")
                 {
-                    Instantiate(strong_tool, new Vector3(j, 0, -i), strong_tool.transform.rotation);
+                    var obj = Instantiate(food, new Vector3(j, 0, -i), food.transform.rotation);
+                    obj.SetActive(true);
+                }
+                else if (_maze[i, j] != "0")
+                {
+                    var pos = new Vector3(j, 0, -i);
+                    if (int.Parse(_maze[i, j]) < 8)
+                    {
+                        _players[int.Parse(_maze[i, j]) - 4].GetComponent<EVEGhostMove>().Init(pos);
+                    }
+                    else
+                    {
+                        _players[int.Parse(_maze[i, j]) - 4].GetComponent<EVEPlayerMove>().Init(pos);
+                    }
                 }
             }
         }
-    }
-
-    private void WriteMaze(int id1, int id2)
-    {
-        BinaryWriter bw;
-        String path = Environment.CurrentDirectory;
-        path += "/Data/" + id1 + "_" + id2;
-        try
-        {
-            bw = new BinaryWriter(new FileStream(path,
-                FileMode.Create));
-        }
-        catch (IOException e)
-        {
-            Console.WriteLine(e.Message + "\n Cannot create file.");
-            return;
-        }
-
-        try
-        {
-            for (int i = 0; i < Maze.GetLength(0); i++)
-            {
-                for (int j = 0; j < Maze.GetLength(1); j++)
-                {
-                    bw.Write(Int32.Parse(Maze[i, j]));
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            Console.WriteLine(e.Message + "\n Cannot write to file.");
-        }
-
-        bw.Close();
     }
 }

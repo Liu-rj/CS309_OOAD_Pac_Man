@@ -30,6 +30,12 @@ public class GhostMove : MonoBehaviour
         speed = 0.1f;
         _mask = LayerMask.GetMask("Wall");
     }
+    
+    public void Init(Vector3 pos)
+    {
+        transform.position = pos;
+        _originPosition = pos;
+    }
 
     // Update is called once per frame
     void FixedUpdate()

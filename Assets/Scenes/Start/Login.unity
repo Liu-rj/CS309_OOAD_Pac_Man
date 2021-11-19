@@ -193,7 +193,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: Enter Password
 --- !u!222 &5109547
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 447722125}
   - component: {fileID: 447722124}
   m_Layer: 5
-  m_Name: "\u7528\u6237\u540D\u7684\u8F93\u5165q"
+  m_Name: NameInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,7 +576,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: Enter UserName
 --- !u!222 &795375764
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -703,6 +703,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31ca5a1a35ad8a644b696b196ba4b97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: {fileID: 447722124}
+  pwd: {fileID: 1114243796}
 --- !u!1 &1051845341
 GameObject:
   m_ObjectHideFlags: 0
@@ -809,7 +811,7 @@ GameObject:
   - component: {fileID: 1114243797}
   - component: {fileID: 1114243796}
   m_Layer: 5
-  m_Name: "\u5BC6\u7801\u7684\u8F93\u5165"
+  m_Name: PWDInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -954,7 +956,7 @@ GameObject:
   - component: {fileID: 1296545614}
   - component: {fileID: 1296545613}
   m_Layer: 5
-  m_Name: background_first
+  m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1355,7 +1357,7 @@ GameObject:
   - component: {fileID: 1568557083}
   - component: {fileID: 1568557082}
   m_Layer: 5
-  m_Name: "\u767B\u5F55\u7684\u6309\u94AE"
+  m_Name: LoginButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1378,7 +1380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 244, y: -176}
+  m_AnchoredPosition: {x: 244, y: -319.5}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1568557082
@@ -1487,7 +1489,7 @@ GameObject:
   - component: {fileID: 1908894410}
   - component: {fileID: 1908894409}
   m_Layer: 5
-  m_Name: "\u5BC6\u7801"
+  m_Name: Password
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1509,7 +1511,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 154.8, y: -103.9}
+  m_AnchoredPosition: {x: 79.9, y: -103.9}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1908894409
@@ -1566,7 +1568,7 @@ GameObject:
   - component: {fileID: 2110424594}
   - component: {fileID: 2110424593}
   m_Layer: 5
-  m_Name: Text
+  m_Name: UserName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1588,7 +1590,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 156, y: -66}
+  m_AnchoredPosition: {x: 83.2, y: -66}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2110424593
