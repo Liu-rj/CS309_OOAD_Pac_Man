@@ -7,34 +7,38 @@ using UnityEngine;
 public class GhostMove : MonoBehaviour
 {
     public float speed;
-    
+
     private Rigidbody _rd;
     private Vector3 _dest;
     private Vector3 _direction;
     private System.Random _random;
     private Vector3[] _dirs;
-    private LayerMask _mask;
+    private LayerMask _wallMask;
+    private LayerMask _ghostMask;
     private Vector3 _originPosition;
+    private int _width;
+    private int _height;
 
     // Start is called before the first frame update
     void Start()
     {
         _rd = GetComponent<Rigidbody>();
-        Transform transform1;
-        (transform1 = transform).rotation = Quaternion.Euler(-90, 0, 90);
-        _dest = transform1.position;
-        _originPosition = _dest;
+        transform.rotation = Quaternion.Euler(-90, 0, 90);
         _direction = Vector3.zero;
         _random = new System.Random();
         _dirs = new[] {Vector3.forward, Vector3.back, Vector3.left, Vector3.right};
         speed = 0.1f;
-        _mask = LayerMask.GetMask("Wall");
+        _wallMask = LayerMask.GetMask("Wall", "Ghost");
+        _ghostMask = LayerMask.GetMask("Ghost");
     }
-    
-    public void Init(Vector3 pos)
+
+    public void Init(Vector3 pos, int width, int height)
     {
         transform.position = pos;
         _originPosition = pos;
+        _dest = pos;
+        _width = width;
+        _height = height;
     }
 
     // Update is called once per frame
@@ -68,8 +72,20 @@ public class GhostMove : MonoBehaviour
 
                 var nextDir = _dirs[i];
                 _dest = transform.position + nextDir;
-                transform.rotation = Quaternion.Euler(-90, 0, (-90 - nextDir.x * 90) * Math.Abs(nextDir.x) + nextDir.z * 90);
+                transform.rotation =
+                    Quaternion.Euler(-90, 0, (-90 - nextDir.x * 90) * Math.Abs(nextDir.x) + nextDir.z * 90);
                 _direction = nextDir;
+            }
+
+            if (_dest.x < 0)
+            {
+                _dest.x = _width - 1;
+                transform.position = _dest;
+            }
+            else if (_dest.x >= _width)
+            {
+                _dest.x = 0;
+                transform.position = _dest;
             }
         }
     }
@@ -77,7 +93,14 @@ public class GhostMove : MonoBehaviour
     private bool Valid(Vector3 dir)
     {
         Vector3 pos = transform.position;
-        return !Physics.Linecast(pos, pos + dir, _mask);
+        if (!Physics.Linecast(pos, pos + dir, _wallMask))
+        {
+            if (!Physics.Linecast(pos, pos + dir * 2, _ghostMask))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void Reset()

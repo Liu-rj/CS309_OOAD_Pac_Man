@@ -24,7 +24,7 @@ public class EVEChoose : MonoBehaviour
         return _opponentID;
     }
 
-    public void ClickChooseScriptButton()
+    public void ClickChooseScriptButton(Canvas cve)
     {
         var path = FolderBrowserHelper.SelectFile(FolderBrowserHelper.PYFILTER);
         Debug.Log(path);
@@ -52,11 +52,11 @@ public class EVEChoose : MonoBehaviour
         }
         else
         {
-            Debug.Log("Invalid File Path!");
+            cve.gameObject.SetActive(true);
         }
     }
 
-    public void ClickOpponentButton()
+    public void ClickOpponentButton(Canvas cve)
     {
         var str = idField.text;
         try
@@ -69,11 +69,11 @@ public class EVEChoose : MonoBehaviour
                 ServerConnector.SendData(_opponentID.ToString());
                 if (ServerConnector.ReceiveData() == "y")
                 {
-                    SceneManager.LoadScene(8);
+                    SceneManager.LoadScene(6);
                 }
                 else
                 {
-                    Debug.Log("Script Does Not Exists!");
+                    cve.gameObject.SetActive(true);
                 }
             }
             else

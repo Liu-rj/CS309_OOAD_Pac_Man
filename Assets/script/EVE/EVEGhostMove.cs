@@ -27,6 +27,11 @@ public class EVEGhostMove : MonoBehaviour
     public void MoveTo(Vector3 pos)
     {
         _nextPos = pos;
+        if (Vector3.Distance(transform.position, _nextPos) < 2)
+        {
+            Vector3 dir = _nextPos - transform.position;
+            transform.rotation = Quaternion.Euler(-90, 0, (-90 - dir.x * 90) * Math.Abs(dir.x) + dir.z * 90);
+        }
         _canMove = true;
     }
 
@@ -36,9 +41,6 @@ public class EVEGhostMove : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, _nextPos) >= 2)
             {
-                Debug.Log("now position: " + transform.position);
-                Debug.Log("next position: " + _nextPos);
-                Debug.Log(Vector3.Distance(transform.position, _nextPos));
                 transform.position = _nextPos;
                 _canMove = false;
                 EVEManager.Moving = false;

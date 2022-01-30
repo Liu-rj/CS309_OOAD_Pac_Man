@@ -9,6 +9,13 @@ public class Login : MonoBehaviour
 {
     public InputField id;
     public InputField pwd;
+    public Text error;
+
+    public void Exit()
+    {
+        Debug.Log(123456);
+        Application.Quit();
+    }
 
     public void OnLoginButtonClick()
     {
@@ -17,23 +24,35 @@ public class Login : MonoBehaviour
         var signal = ServerConnector.ReceiveData();
         if (signal == "y")
         {
+            
             ServerConnector.SendData(id.text + " " + pwd.text);
             var str = ServerConnector.ReceiveData();
             if (str == "y")
             {
+                GameManager.UserName = id.text;
+                GameManager.PullUserData();
                 SceneManager.LoadScene(1);
             }
             else
             {
-                Debug.Log("Username or Password failed!");
-                Debug.Log(str);
+                Debug.Log("Wrong userID or password!");
                 ServerConnector.CloseConnection();
+                error.text = "Wrong userID or password!";
             }
         }
         else
         {
-            Debug.Log(signal);
+            Debug.Log("Connect fail!");
             ServerConnector.CloseConnection();
+            error.text = "Connect fail!";
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)||Input.GetMouseButtonDown(1))
+        {
+            error.text = "";
         }
     }
 }

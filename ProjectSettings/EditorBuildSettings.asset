@@ -14,9 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Start/ChooseMode.unity
     guid: b734163a1198cff4c83f5564097dc39a
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/PVE/PVELoading.unity
     guid: 0ea9a5424ccbca24490fb6c0dd8e3400
@@ -24,21 +21,24 @@ EditorBuildSettings:
     path: Assets/Scenes/PVE/PVE.unity
     guid: 5c6875bd1f8617744b254e28ecd7bdc2
   - enabled: 1
-    path: Assets/Scenes/PVE/PVEMapChoose.unity
-    guid: 02ca18f8cb148104b89bf15fe77733fb
-  - enabled: 1
     path: Assets/Scenes/PVE/PVERandomMaze.unity
     guid: 31029b64ebe30d1429568934d47bfd15
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Scenes/EVE/EVEChoose.unity
-    guid: 656d6f50d30642645a9caa051142a91c
   - enabled: 1
     path: Assets/Scenes/EVE/EVELoading.unity
     guid: 596b8645d27c64e40b12c0653e9cfdb7
   - enabled: 1
     path: Assets/Scenes/EVE/EVE.unity
     guid: c180c9bb42f99874aa3eb0dd2b30e76c
+  - enabled: 1
+    path: Assets/Scenes/FogMode/Fog_double.unity
+    guid: 2f717b017b999604ab8d837e2f088465
+  - enabled: 1
+    path: Assets/Scenes/PVP/NetWrok.unity
+    guid: ffee792e8538fe648bf617bbab3c95c2
+  - enabled: 1
+    path: Assets/Scenes/PVP/Game.unity
+    guid: db37ebd2b9ba9b446aaf9c22800b8250
+  - enabled: 1
+    path: Assets/Scenes/FogMode/Fog.unity
+    guid: 1177b13887af54a4a8a4818a2dade5f7
   m_configObjects: {}

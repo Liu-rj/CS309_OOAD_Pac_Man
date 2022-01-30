@@ -5,12 +5,17 @@ using UnityEngine;
 
 public class ServerConnector : MonoBehaviour
 {
-    private static readonly string _serverAddress = "127.0.0.1";
+    private static readonly string _serverAddress = "10.20.100.145";
     private static readonly int _serverPort = 5000;
     private static TcpClient _client;
     private static NetworkStream _stream; // C#中采用NetworkStream的方式, 可以类比于python网络编程中的socket
     
     public static bool IsConnected;
+
+    private void OnApplicationQuit()
+    {
+        CloseConnection();
+    }
 
     public static void SetupConnection()
     {

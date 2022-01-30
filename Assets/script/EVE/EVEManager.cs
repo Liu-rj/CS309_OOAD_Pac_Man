@@ -8,6 +8,7 @@ using Debug = UnityEngine.Debug;
 using System.Threading;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class EVEManager : MonoBehaviour
 {
@@ -21,12 +22,19 @@ public class EVEManager : MonoBehaviour
     public GameObject strongTool;
     public GameObject food;
     public static bool Moving;
+    private bool exit;
+    private float exit_time;
+    private string s1;
+    private string s2;
 
     private GameObject[] _players;
     private Thread _thread;
     private Queue<string> _msgQ;
     private bool _end;
     private string[,] _maze;
+    public Canvas cv_exit;
+    public Text finish_state;
+    public GameObject role;
 
     // Start is called before the first frame update
     void Start()
@@ -42,11 +50,18 @@ public class EVEManager : MonoBehaviour
             IsBackground = true
         };
         _thread.Start();
+        cv_exit.gameObject.SetActive(false);
+        role.SetActive(false);
     }
 
     private void SetGameOver()
     {
         _end = true;
+        PauseGame();
+    }
+
+    private void PauseGame()
+    {
         for (int i = 0; i < 6; i++)
         {
             if (i < 4)
@@ -60,10 +75,45 @@ public class EVEManager : MonoBehaviour
         }
     }
 
+    public void ClickOnBack()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (i < 4)
+            {
+                _players[i].GetComponent<EVEGhostMove>().enabled = true;
+            }
+            else
+            {
+                _players[i].GetComponent<EVEPlayerMove>().enabled = true;
+            }
+        }
+    }
+    
+    public void ClickOnExit()
+    {
+        ServerConnector.SendData("n");
+        SceneManager.LoadScene(1);
+    }
+
     private void Update()
     {
+        if (exit)
+        {
+            exit_time += Time.deltaTime;
+            if (exit_time > 2)
+            {
+                SceneManager.LoadScene(2);
+            }
+        }
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            PauseGame();
+            cv_exit.gameObject.SetActive(true);
+        }
         if (!Moving && _msgQ.Count > 0 && !_end)
         {
+            Moving = true;
             var str = _msgQ.Dequeue().Split(' ');
             var signal = int.Parse(str[0]);
             if (signal < 4)
@@ -79,18 +129,61 @@ public class EVEManager : MonoBehaviour
             else
             {
                 SetGameOver();
-                switch (signal)
+                if (str[1]=="4")
                 {
+                    s1 = "yellow";
+                    s2 = "green";
+                }
+                else
+                {
+                    s1 = "green";
+                    s2 = "yellow";
+                }
+                switch (signal)
+                {  
+                    
                     case 6:
-                        Debug.Log(str[1] + " " + str[2]);
+                        role.SetActive(true);
+                        if (int.Parse(str[1]) > int.Parse(str[2]))
+                        {
+                            GameManager.Score += 10;
+                            finish_state.text = "You Win!";
+                        }
+                        else if (int.Parse(str[1]) < int.Parse(str[2]))
+                        {
+                            finish_state.text = "Opponent Win!";
+                        }
+                        else
+                        {
+                            finish_state.text = "Game Draw!";
+                        }
                         break;
                     case 7:
-                        Debug.Log("Pacman " + str[1] + " Illegal Move");
+                        role.SetActive(true);
+                        if (str[1] == "5")
+                        {
+                            GameManager.Score += 10;
+                        }
+                        finish_state.text = "Pacman " + s1 + " Illegal Move";
                         break;
                     case 8:
-                        Debug.Log(str[1] + "Game Over!");
+                        role.SetActive(true);
+                        if (str[1] == "5")
+                        {
+                            GameManager.Score += 10;
+                        }
+                        finish_state.text = "Pacman " + s1 + " was eaten by Ghost!";
+                        break;
+                    case 9:
+                        role.SetActive(true);
+                        if (str[1] == "5")
+                        {
+                            GameManager.Score += 10;
+                        }
+                        finish_state.text = "Pacman " + s1 + " error in script";
                         break;
                 }
+                exit = true;
             }
         }
     }
@@ -135,22 +228,22 @@ public class EVEManager : MonoBehaviour
             {
                 if (_maze[i, j] == "1")
                 {
-                    var obj = Instantiate(walls, new Vector3(j, 0, -i), walls.transform.rotation);
+                    var obj = Instantiate(walls, new Vector3(j, 0.5f, -i), walls.transform.rotation);
                     obj.SetActive(true);
                 }
                 else if (_maze[i, j] == "2")
                 {
-                    var obj = Instantiate(strongTool, new Vector3(j, 0, -i), strongTool.transform.rotation);
+                    var obj = Instantiate(strongTool, new Vector3(j, 0.5f, -i), strongTool.transform.rotation);
                     obj.SetActive(true);
                 }
                 else if (_maze[i, j] == "3")
                 {
-                    var obj = Instantiate(food, new Vector3(j, 0, -i), food.transform.rotation);
+                    var obj = Instantiate(food, new Vector3(j, 0.5f, -i), food.transform.rotation);
                     obj.SetActive(true);
                 }
                 else if (_maze[i, j] != "0")
                 {
-                    var pos = new Vector3(j, 0, -i);
+                    var pos = new Vector3(j, 0.5f, -i);
                     if (int.Parse(_maze[i, j]) < 8)
                     {
                         _players[int.Parse(_maze[i, j]) - 4].GetComponent<EVEGhostMove>().Init(pos);

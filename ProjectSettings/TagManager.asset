@@ -17,6 +17,20 @@ TagManager:
   - p2p
   - guide
   - e2e
+  - suckball
+  - accelerateball
+  - p2e_random
+  - gUp
+  - gLeft
+  - gRight
+  - fog
+  - beforefog
+  - beforep2p
+  - beforep2e_random
+  - beforep2e
+  - beforee2e
+  - win
+  - beforetruefog
   layers:
   - Default
   - TransparentFX
@@ -28,8 +42,8 @@ TagManager:
   - obs
   - tar
   - Wall
-  - 
-  - 
+  - Ghost
+  - Pacman
   - 
   - 
   - 

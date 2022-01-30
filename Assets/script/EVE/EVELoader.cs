@@ -57,7 +57,7 @@ public class EVELoader : MonoBehaviour
 
     IEnumerator loadScene()
     {
-        asyncOperation = SceneManager.LoadSceneAsync(9);
+        asyncOperation = SceneManager.LoadSceneAsync(7);
         asyncOperation.allowSceneActivation = false;
         yield return asyncOperation;
     }

@@ -8,6 +8,9 @@ from socket import *
 import copy
 import numpy as np
 import random
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
 
 DIRS = [[0, 1], [1, 0], [0, -1], [-1, 0]]
 
@@ -18,6 +21,10 @@ try:
 except FileNotFoundError:
     pass
 
+Online_Users={}
+mail_host="smtp.exmail.qq.com"  #设置服务器
+mail_user="11911419@mail.sustech.edu.cn"    #用户名
+mail_pass="QgZsoBpHChEAh2BT"   #口令
 
 class PacmanServer(threading.Thread):
     shared_lock = threading.Lock()
@@ -500,6 +507,36 @@ class PacmanServer(threading.Thread):
                 maze[i][j] = int(maze[i][j])
         self.conn.send(map_string.encode())
 
+    def send_email(self,receiver):
+        print(receiver)
+        sender = '11911419@mail.sustech.edu.cn'
+        receivers = [receiver]
+        s = ''
+        for i in range(6):
+            num = random.randint(0, 9)
+            upper_alpha = chr(random.randint(65, 90))
+            lower_alpha = chr(random.randint(97, 122))
+            num = random.choice([num, upper_alpha, lower_alpha])
+            s = s + str(num)
+        message = MIMEText(s, 'plain', 'utf-8')
+        message['From'] = Header("SUSTECH Pacman Server", 'utf-8')
+        message['To'] = Header(receivers[0], 'utf-8')
+
+        subject = 'SUSTECH PACMAN 验证码'
+        message['Subject'] = Header(subject, 'utf-8')
+
+        try:
+            smtpObj = smtplib.SMTP()
+            smtpObj.connect(mail_host, 25)  # 25 为 SMTP 端口号
+            smtpObj.login(mail_user, mail_pass)
+            smtpObj.sendmail(sender, receivers, message.as_string())
+            print("邮件发送成功")
+            return s
+        except smtplib.SMTPException:
+            print("Error: 无法发送邮件")
+            return None
+
+
     def run(self):
         while True:
             try:
@@ -507,6 +544,7 @@ class PacmanServer(threading.Thread):
             except:
                 continue
             if signal == b'':
+                val=Online_Users.pop(self.user_name,'-1')
                 self.conn.close()
                 return
             print(signal)
@@ -523,8 +561,9 @@ class PacmanServer(threading.Thread):
                 pwd = login_data[1]
                 if user_name in USERS.keys():
                     true_pwd = USERS[user_name]['pwd']
-                    if pwd == true_pwd:
+                    if user_name not in Online_Users and pwd == true_pwd:
                         self.user_name = user_name
+                        Online_Users[user_name]='1'
                         self.conn.send('y'.encode())
                     else:
                         self.conn.send('n'.encode())
@@ -562,9 +601,17 @@ class PacmanServer(threading.Thread):
                     run_thread.start()
                     recv_buf = ''
                     while True:
-                        data = receive_all(self.conn).decode()
-                        if data == 'y':
+                        data = ''
+                        try:
+                            data=self.conn.recv(2048)
+                        except:
+                            continue
+                        if data == b'y':
                             recv_buf = 'y'
+                        elif data==b'':
+                            val = Online_Users.pop(self.user_name, '-1')
+                            self.conn.close()
+                            return
                         if self.index < len(self.action_q) and recv_buf == 'y':
                             self.conn.send(self.action_q[self.index])
                             recv_buf = ''
@@ -579,6 +626,51 @@ class PacmanServer(threading.Thread):
                 maze = self.gen_maze()
                 maze[17][14] = '0'
                 self.send_maze(maze)
+            elif signal==b'4':
+                data = receive_all(self.conn).decode()
+                if not data:
+                    self.conn.send('n'.encode())
+                    continue
+                login_data = data.split(' ')
+                user_name = login_data[0]
+                email_address=login_data[1]
+                pwd = login_data[2]
+                if user_name in USERS.keys():
+                    self.conn.send('n'.encode())
+                    self.conn.close()
+                    return 
+                else:
+                    pwd_dic={'pwd':pwd,'email':email_address}
+                    token=self.send_email(email_address)
+                    if token is None:
+                        self.conn.send('n'.encode())
+                        self.conn.close()
+                        return
+                    self.conn.send('y'.encode())
+                    received_token=''
+                    while True:
+                        confirm_data='-1'
+                        try:
+                            confirm_data=self.conn.recv(2048)
+                        except:
+                            continue
+                        #confirm_data should be 'y' or 'q'
+                        confirm_data=confirm_data.decode()
+                        if confirm_data=='' or confirm_data=='q':
+                            self.conn.close()
+                            return
+                        received_token=receive_all(self.conn).decode()
+                        if received_token==token:
+                            break
+                        else:
+                            self.conn.send('n'.encode())
+                    USERS[user_name]=pwd_dic
+                    with open('./user_data.json','w',encoding='utf-8') as ff:
+                        json.dump(USERS,ff)
+                    Online_Users[user_name]='1'
+                    self.conn.send('y'.encode())
+                    self.user_name=user_name
+
 
 
 def receive_all(the_socket, time_limit=1):

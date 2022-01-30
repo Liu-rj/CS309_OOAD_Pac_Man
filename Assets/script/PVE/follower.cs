@@ -15,6 +15,10 @@ public class follower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = ball.position + distance;
+        if (!Input.GetMouseButton(1))
+        {
+            transform.position = ball.position + distance;
+            transform.eulerAngles =new Vector3(20, 0, 0);
+        }
     }
 }
